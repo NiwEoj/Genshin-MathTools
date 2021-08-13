@@ -1,0 +1,75 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<style>
+    .container {
+        /* padding: 1px; */
+        width: 100%;
+        color: white;
+        display: inline-grid;
+        grid-template-columns: 50% 50%;
+    }
+
+    .sub_container{
+        padding: 1%;
+    }
+
+    .sub_container_header {
+        margin-bottom: 1%
+    }
+
+    .sub_container_body_item {
+        margin-right: 1%;
+    }
+
+    .divider {
+        height: inherit;
+        border-left: 2px solid white;
+    }
+
+    .tab{
+        overflow: hidden;
+        border: none;
+        background-color: #343A40;
+    }
+
+    .tab button{
+        background-color: white;
+        float: left;
+    }
+</style>
+
+<div class="container">
+    <div class="sub_container">
+        <div class=sub_container_header>
+            <h2>Builds</h2>
+        </div>
+        <div class="sub_container_body">
+            <h2>Confuguration panel</h2>
+            {% include "content/builds/list.html" %}
+        </div>
+    </div>
+    <!-- <div class="divider"></div> -->
+    <div class="sub_container">
+
+        <div class=sub_container_header>
+            <!-- <div class="tab">
+                <button>Weapon</button>
+                <button>Artifacts</button>
+            </div> -->
+        </div>
+
+        <div class="sub_container_body">
+        </div>
+    </div>
+</div>
+
+<script>
+    // function weaponSelection() {
+    //     var selection = document.getElementById("weapons").value
+    //     console.log(selection)
+    // }
+</script>
+
+{% endblock %}
