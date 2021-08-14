@@ -10,9 +10,8 @@ start = timeit.default_timer()
 # load character and weapon stats
 wpnoptions = {'Name':['Rust','Slingshot','Blackcliff','Harp'],
               'BaseAtk':[510,354,565,674],
-              'scdAtk':[.413,0,0,0],
-              'scdCrt':[0,.312,0,.221],
-              'scdCdmg':[0,0,.368,0]}
+              'scdSttType':['Atk','Crt','Cdmg','Crt'],
+              'scdStt':[.413,.312,.368,.221]}
 charatk = 244
 chardef = 594
 charhp = 9189
@@ -43,9 +42,13 @@ for n in range(numOfWpn):
     effatk = [0]*N
     crit = [0]*N
     wpnatk = wpnoptions['BaseAtk'][n]
-    wpnatkp = wpnoptions['scdAtk'][n]
-    wpncrit = wpnoptions['scdCrt'][n]
-    wpncdmg = wpnoptions['scdCdmg'][n]
+    wpnatkp,wpncrit,wpncdmg = (0,0,0)
+    if wpnoptions['scdSttType'][n] == 'Atk':
+        wpnatkp = wpnoptions['scdStt'][n]
+    elif wpnoptions['scdSttType'][n] == 'Crt':
+        wpncrit = wpnoptions['scdStt'][n]
+    elif wpnoptions['scdSttType'][n] == 'Cdmg':
+        wpncdmg = wpnoptions['scdStt'][n]
     ttlatkp = ascatk + wpnatkp
     ttlcrit = .05 + wpncrit + asccrit
     ttlcdmg = .5 + wpncdmg
