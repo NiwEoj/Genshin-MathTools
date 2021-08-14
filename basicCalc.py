@@ -22,10 +22,11 @@ def resCalc(enemres,resreduc):
 reaction = 'vape'
 lvmulti = 723                   # lvmulti is base dmg of transformative reaction 
 chrlv,chratk = (90,244)
-asccrit,asccdmg,ascatk,ascem,ascdef,aschp,ascdmgbns = (0,0,.24,0,0,0,0)
+asccrit,asccdmg,ascatk,ascem,ascdef,aschp,ascdmgbns,ascpdmgbns = (0,0,.24,0,0,0,0,0)
 wpnatk,wpncrit,wpncdmg,wpnatkp,wpnem = (510,0,0,.413,0)
 wpndmgbns = 0
 artcrit,artcdmg,artatk,artem,artdef,arthp,artdmgbns = (.55,.7,.7,0,0,0,.466)
+artpdmgbns = 0
 artflower,artfeather = (4780,311)
 resreducA,resreducT,resreducP = (0,0,0)
 defreduc = 0
@@ -38,10 +39,12 @@ ttlatkp = ascatk + artatk + wpnatkp
 ttlcrit = .05 + asccrit + wpncrit + artcrit
 ttlcdmg = .5 + asccdmg + wpncdmg + artcdmg
 ttlem = ascem + wpnem +  artem
-ttldmgbns = artdmgbns + wpndmgbns
+ttldmgbnsE = artdmgbns + ascdmgbns
+ttldmgbnsP = artpdmgbns + wpndmgbns + ascpdmgbns
 atkstt = baseatk * ttlatkp + artfeather
 critmulti = 1 + ttlcrit * ttlcdmg
-dmgmulti = 1 + ttldmgbns 
+dmgmultiE = 1 + ttldmgbnsE
+dmgmultiP = 1 + ttldmgbnsP
 if reaction == 'vape':
     reactmulti = 1.5 
     tdmg = 0
@@ -68,8 +71,10 @@ resmultiT = resCalc(enemresT,resreducT)
 resmultiP = resCalc(enemresP,resreducP)
 
 # damage formula (E for elemental dmg, P for physical dmg. T stands for transformative reaction and A for amplifying)
-avgEdmg = atkstt * critmulti * dmgmulti * reactmulti * emmultiA * defmulti * resmultiA + tdmg * emmultiT * resmultiT
-avgPdmg = atkstt * critmulti * dmgmulti * defmulti * resmultiP
+avgEdmg = atkstt * critmulti * dmgmultiE * reactmulti * emmultiA * defmulti * resmultiA + tdmg * emmultiT * resmultiT
+avgPdmg = atkstt * critmulti * dmgmultiP * defmulti * resmultiP
+
+print(avgEdmg,avgPdmg)
 
 stop = timeit.default_timer()
 print('Time: ', stop - start)
