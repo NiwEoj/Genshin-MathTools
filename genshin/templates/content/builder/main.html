@@ -13,7 +13,8 @@
     }
 
     .sub_container {
-        margin: 3%
+        background-color: #343A40;
+        margin: 2%
     }
 
     .sub_container_header {
@@ -54,16 +55,17 @@
         width: fit-content;
         background-color: #212529;
         visibility: hidden;
+        overflow: hidden;
     }
 
     .selection_area.active {
         display: grid;
-        grid-template-columns: max-content max-content max-content max-content max-content max-content;
+        grid-template-columns: max-content max-content max-content max-content max-content max-content max-content;
         grid-template-rows: max-content max-content max-content max-content max-content;
         grid-gap: 5px;
         height: 500px;
         visibility: visible;
-        transition: height .2s;
+        transition: height .5s;
     }
 
     .character_button {
@@ -72,6 +74,10 @@
         display: flex;
         justify-content: center;
         cursor: pointer;
+    }
+
+    .character_button img {
+        width: 80px;
     }
 
     .arrow {
@@ -87,22 +93,23 @@
     .down {
         transform: rotate(45deg);
         -webkit-transform: rotate(45deg);
+        transition: transform .5s;
+    }
+
+    .up {
+        transform: rotate(225deg);
+        -webkit-transform: rotate(225deg);
+        transition: transform .5s;
     }
 </style>
 
 <div class="container">
     <div class="sub_container">
-        <!-- <select id=" character_id" name="character" onchange="charSelection()">
-                    <option value="" selected disabled>-- Select a character --</option>
-                    {% for c in characters %}
-                    <option value={{ c.id }} {% ifequal c.id selected_char.id %} selected {% endifequal %}>{{ c.name }}</option>
-                    {% endfor %}
-                    </select> -->
         <div class=sub_container_header>
             <form id="select_character" method="GET" action="{% url 'builder' %}">
                 <input type="hidden" value="" id="char_id" name="character">
             </form>
-            <h1>{{ selected_char.name }}<i class="arrow down" onclick="charSelection(this)"></i></h1>
+            <h1 style="padding: 0 15px 0 15px;">{{ selected_char.name }}<i class="arrow down" id="arrow1" onclick="charSelection(this)"></i></h1>
             <div class="selection_area" id="char_selection">
                 {% for c in characters %}
                 <div class="character_button">
@@ -115,24 +122,14 @@
             {% include 'content/builder/characterStats.html' %}
         </div>
     </div>
-    <!-- <div class="divider"></div> -->
     <div class="sub_container">
-
-        <div class=sub_container_header>
-            <div class="tab">
-                <button class="tab_button active" onclick="tabChange(event, 'weapon')" id="defaultOpen">Weapon</button>
-                <button class="tab_button" onclick="tabChange(event, 'artifacts')">Artifacts</button>
-            </div>
-        </div>
-
         <div class="sub_container_body">
-            <div id="weapon" class="tab_content">
+            <div id="weapon">
                 {% include 'content/builder/weaponStats.html' %}
             </div>
-            <div id="artifacts" class="tab_content">
+            <div id="artifacts">
                 12123
             </div>
-
         </div>
     </div>
 </div>
@@ -160,8 +157,11 @@
     function charSelection() {
 
         var selectionArea = document.getElementById("char_selection")
+        var arrow = document.getElementById("arrow1")
 
         selectionArea.classList.toggle("active")
+        arrow.classList.toggle("up");
+        arrow.classList.toggle("down");
 
     }
 

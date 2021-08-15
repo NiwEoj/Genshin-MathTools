@@ -1,11 +1,13 @@
 <style>
     .stats_table {
         display: flex;
+        font-size: 15px;
+        width: inherit;
     }
 
     .stats_table table {
         border-collapse: collapse;
-        width: 700px;
+        width: 100% !important;
     }
 
     .stats_table th,
@@ -33,104 +35,102 @@
 </style>
 
 <div class="stats_table">
-    <div style="margin-right: 5px;">
-        <table>
-            <tr>
-                <th colspan="2" class="stat_header">Base Stat</th>
-                <th colspan="2" class="stat_header">Elemental Type</th>
-            </tr>
-            <tr>
-                <td class="stat_title">HP</td>
-                <td class="stat_value">{{ selected_char.hp }}</td>
-                <td class="stat_title">Pyro Damage</td>
-                <td class="stat_value">{{ selected_char.pyroDmg }}</td>
-            </tr>
-            <tr>
-                <td class="stat_title">ATK</td>
-                <td class="stat_value">{{ selected_char.attack }}</td>
-                <td class="stat_title">Pyro Resistance</td>
-                <td class="stat_value">{{ selected_char.pyroRes }}</td>
-            </tr>
-            <tr>
-                <td class="stat_title">DEF</td>
-                <td class="stat_value">{{ selected_char.defence }}</td>
-                <td class="stat_title">Hydro Damage</td>
-                <td class="stat_value">{{ selected_char.hydroDmg }}</td>
-            </tr>
-            <tr>
-                <td class="stat_title">Elemental Mastery</td>
-                <td class="stat_value">{{ selected_char.em }}</td>
-                <td class="stat_title">Hydro Resistance</td>
-                <td class="stat_value">{{ selected_char.hydroRes }}</td>
-            </tr>
-            <tr>
-                <td class="stat_title">Stamina</td>
-                <td class="stat_value">{{ selected_char.stamina }}</td>
-                <td class="stat_title">Dendro Damage</td>
-                <td class="stat_value">{{ selected_char.dendroDmg }}</td>
-            </tr>
-            <tr>
-                <th colspan="2" class="stat_header">Advanced Stat</th>
-                <td class="stat_title">Dendro Resistance</td>
-                <td class="stat_value">{{ selected_char.dendroRes }}</td>
-            </tr>
-            <tr>
-                <td class="stat_title">Crit Rate</td>
-                <td class="stat_value">{{ selected_char.critRate }}</td>
-                <td class="stat_title">Electro Damage</td>
-                <td class="stat_value">{{ selected_char.electroDmg }}</td>
-            </tr>
-            <tr>
-                <td class="stat_title">Crit Damage</td>
-                <td class="stat_value">{{ selected_char.critDmg }}</td>
-                <td class="stat_title">Electro Resistance</td>
-                <td class="stat_value">{{ selected_char.electroRes }}</td>
-            </tr>
-            <tr>
-                <td class="stat_title">Healing Bonus</td>
-                <td class="stat_value">{{ selected_char.selfHeal }}</td>
-                <td class="stat_title">Anemo Damage</td>
-                <td class="stat_value">{{ selected_char.anemoDmg }}</td>
-            </tr>
-            <tr>
-                <td class="stat_title">Incoming Healing Bonus</td>
-                <td class="stat_value">{{ selected_char.othersHeal }}</td>
-                <td class="stat_title">Anemo Resistance</td>
-                <td class="stat_value">{{ selected_char.anemoRes }}</td>
-            </tr>
-            <tr>
-                <td class="stat_title">Elemental Recharge</td>
-                <td class="stat_value">{{ selected_char.recharge }}</td>
-                <td class="stat_title">Cryo Damage</td>
-                <td class="stat_value">{{ selected_char.cryoDmg }}</td>
-            </tr>
-            <tr>
-                <td class="stat_title">Reduce CD</td>
-                <td class="stat_value">{{ selected_char.cdReduction }}</td>
-                <td class="stat_title">Cryo Resistance</td>
-                <td class="stat_value">{{ selected_char.cryoRes }}</td>
-            </tr>
-            <tr>
-                <td class="stat_title">Shield Strength</td>
-                <td class="stat_value">{{ selected_char.shield }}</td>
-                <td class="stat_title">Geo Damage</td>
-                <td class="stat_value">{{ selected_char.geoDmg }}</td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td class="stat_title">Geo Resistance</td>
-                <td class="stat_value">{{ selected_char.geoRes }}</td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td class="stat_title">Physical Damage</td>
-                <td class="stat_value">{{ selected_char.physDmg }}</td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td class="stat_title">Physical Resistance</td>
-                <td class="stat_value">{{ selected_char.physRes }}</td>
-            </tr>
-        </table>
-    </div>
+    <table>
+        <tr>
+            <th colspan="2" class="stat_header">Base Stat</th>
+            <th colspan="2" class="stat_header">Elemental Type</th>
+        </tr>
+        <tr>
+            <td class="stat_title">HP</td>
+            <td class="stat_value">{{ selected_char.hp }}</td>
+            <td class="stat_title">Pyro Damage</td>
+            <td class="stat_value">{{ selected_char.pyroDmg }}</td>
+        </tr>
+        <tr>
+            <td class="stat_title">ATK</td>
+            <td class="stat_value">{{ selected_char.attack }}</td>
+            <td class="stat_title">Pyro Resistance</td>
+            <td class="stat_value">{{ selected_char.pyroRes }}</td>
+        </tr>
+        <tr>
+            <td class="stat_title">DEF</td>
+            <td class="stat_value">{{ selected_char.defence }}</td>
+            <td class="stat_title">Hydro Damage</td>
+            <td class="stat_value">{{ selected_char.hydroDmg }}</td>
+        </tr>
+        <tr>
+            <td class="stat_title">Elemental Mastery</td>
+            <td class="stat_value">{{ selected_char.em }}</td>
+            <td class="stat_title">Hydro Resistance</td>
+            <td class="stat_value">{{ selected_char.hydroRes }}</td>
+        </tr>
+        <tr>
+            <td class="stat_title">Stamina</td>
+            <td class="stat_value">{{ selected_char.stamina }}</td>
+            <td class="stat_title">Dendro Damage</td>
+            <td class="stat_value">{{ selected_char.dendroDmg }}</td>
+        </tr>
+        <tr>
+            <th colspan="2" class="stat_header">Advanced Stat</th>
+            <td class="stat_title">Dendro Resistance</td>
+            <td class="stat_value">{{ selected_char.dendroRes }}</td>
+        </tr>
+        <tr>
+            <td class="stat_title">Crit Rate</td>
+            <td class="stat_value">{{ selected_char.critRate }}</td>
+            <td class="stat_title">Electro Damage</td>
+            <td class="stat_value">{{ selected_char.electroDmg }}</td>
+        </tr>
+        <tr>
+            <td class="stat_title">Crit Damage</td>
+            <td class="stat_value">{{ selected_char.critDmg }}</td>
+            <td class="stat_title">Electro Resistance</td>
+            <td class="stat_value">{{ selected_char.electroRes }}</td>
+        </tr>
+        <tr>
+            <td class="stat_title">Healing Bonus</td>
+            <td class="stat_value">{{ selected_char.selfHeal }}</td>
+            <td class="stat_title">Anemo Damage</td>
+            <td class="stat_value">{{ selected_char.anemoDmg }}</td>
+        </tr>
+        <tr>
+            <td class="stat_title">Incoming Healing Bonus</td>
+            <td class="stat_value">{{ selected_char.othersHeal }}</td>
+            <td class="stat_title">Anemo Resistance</td>
+            <td class="stat_value">{{ selected_char.anemoRes }}</td>
+        </tr>
+        <tr>
+            <td class="stat_title">Elemental Recharge</td>
+            <td class="stat_value">{{ selected_char.recharge }}</td>
+            <td class="stat_title">Cryo Damage</td>
+            <td class="stat_value">{{ selected_char.cryoDmg }}</td>
+        </tr>
+        <tr>
+            <td class="stat_title">Reduce CD</td>
+            <td class="stat_value">{{ selected_char.cdReduction }}</td>
+            <td class="stat_title">Cryo Resistance</td>
+            <td class="stat_value">{{ selected_char.cryoRes }}</td>
+        </tr>
+        <tr>
+            <td class="stat_title">Shield Strength</td>
+            <td class="stat_value">{{ selected_char.shield }}</td>
+            <td class="stat_title">Geo Damage</td>
+            <td class="stat_value">{{ selected_char.geoDmg }}</td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td class="stat_title">Geo Resistance</td>
+            <td class="stat_value">{{ selected_char.geoRes }}</td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td class="stat_title">Physical Damage</td>
+            <td class="stat_value">{{ selected_char.physDmg }}</td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td class="stat_title">Physical Resistance</td>
+            <td class="stat_value">{{ selected_char.physRes }}</td>
+        </tr>
+    </table>
 </div>
