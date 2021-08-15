@@ -150,7 +150,7 @@ STATIC_ROOT = Path.joinpath(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    Path.joinpath(BASE_DIR, 'static/bootstrap'),
+    Path.joinpath(BASE_DIR, 'static/admin'),
 ]
 
 # Default primary key field type

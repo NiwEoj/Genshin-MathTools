@@ -11,8 +11,8 @@
         grid-template-columns: 50% 50%;
     }
 
-    .sub_container{
-        padding: 1%;
+    .sub_container {
+        padding: 3%;
     }
 
     .sub_container_header {
@@ -28,13 +28,13 @@
         border-left: 2px solid white;
     }
 
-    .tab{
+    .tab {
         overflow: hidden;
         border: none;
         background-color: #343A40;
     }
 
-    .tab button{
+    .tab button {
         background-color: white;
         float: left;
     }
@@ -44,20 +44,32 @@
     <div class="sub_container">
         <div class=sub_container_header>
             <h2>Builds</h2>
+            <form id="select_character" method="GET" action="{% url 'builds' %}">
+                <label for="character_id"><p>Character</p></label>
+                <select id="character_id" name="character" onchange="characterSelection()">
+                    <option value="" selected disabled>-- Select a character --</option>
+                    {% for c in characters %}
+                    <option value={{ c.id }} {% ifequal c.id selected_char.id %} selected {% endifequal %}>{{ c.name }}</option>
+                    {% endfor %}
+                </select>
+                <label for="playstyle"><p>Playstyle</p></label>
+                <select id="playstyle" name="playstlye" onchange="">
+                    <option value="" selected disabled>-- Select a playstlye --</option>
+                    <option value=0>Auto attack</option>
+                    <option value=1>Element Skill</option>
+                    <option value=2>Element Burst</option>
+                </select>
+            </form>
         </div>
         <div class="sub_container_body">
             <h2>Confuguration panel</h2>
             {% include "content/builds/list.html" %}
         </div>
     </div>
-    <!-- <div class="divider"></div> -->
     <div class="sub_container">
 
         <div class=sub_container_header>
-            <!-- <div class="tab">
-                <button>Weapon</button>
-                <button>Artifacts</button>
-            </div> -->
+            <h2>Results</h2>
         </div>
 
         <div class="sub_container_body">
@@ -66,10 +78,14 @@
 </div>
 
 <script>
-    // function weaponSelection() {
-    //     var selection = document.getElementById("weapons").value
-    //     console.log(selection)
-    // }
+    function characterSelection() {
+        var selection = document.getElementById("character_id").value
+        console.debug(selection)
+        if (selection != "") {
+            document.getElementById("select_character").submit();
+        }
+
+    }
 </script>
 
 {% endblock %}

@@ -1,0 +1,175 @@
+{% extends 'base/base.html' %}
+{% load static from static %}
+
+{% block content %}
+
+<style>
+    .container {
+        /* margin: 1%; */
+        width: 100%;
+        color: white;
+        display: inline-grid;
+        grid-template-columns: 50% 50%;
+    }
+
+    .sub_container {
+        margin: 3%
+    }
+
+    .sub_container_header {
+        margin-bottom: 1%;
+        width: inherit;
+
+    }
+
+    .sub_container_body_item {
+        margin-right: 1%;
+    }
+
+    .tab {
+        overflow: hidden;
+    }
+
+    .tab_button {
+        background-color: #343A40;
+        color: white;
+        outline: none;
+        border: none;
+        float: left;
+        cursor: pointer;
+        padding: 10px;
+    }
+
+    .tab_button.active {
+        background-color: #212529;
+    }
+
+    .tab_content {
+        display: none;
+    }
+
+    .selection_area {
+        position: absolute;
+        height: 0px;
+        width: fit-content;
+        background-color: #212529;
+        visibility: hidden;
+    }
+
+    .selection_area.active {
+        display: grid;
+        grid-template-columns: max-content max-content max-content max-content max-content max-content;
+        grid-template-rows: max-content max-content max-content max-content max-content;
+        grid-gap: 5px;
+        height: 500px;
+        visibility: visible;
+        transition: height .2s;
+    }
+
+    .character_button {
+        margin: 5px;
+        border: 2px solid #2B3035;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .arrow {
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 3px;
+        margin-left: 5%;
+        margin-bottom: 1%;
+        cursor: pointer;
+    }
+
+    .down {
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+    }
+</style>
+
+<div class="container">
+    <div class="sub_container">
+        <!-- <select id=" character_id" name="character" onchange="charSelection()">
+                    <option value="" selected disabled>-- Select a character --</option>
+                    {% for c in characters %}
+                    <option value={{ c.id }} {% ifequal c.id selected_char.id %} selected {% endifequal %}>{{ c.name }}</option>
+                    {% endfor %}
+                    </select> -->
+        <div class=sub_container_header>
+            <form id="select_character" method="GET" action="{% url 'builder' %}">
+                <input type="hidden" value="" id="char_id" name="character">
+            </form>
+            <h1>{{ selected_char.name }}<i class="arrow down" onclick="charSelection(this)"></i></h1>
+            <div class="selection_area" id="char_selection">
+                {% for c in characters %}
+                <div class="character_button">
+                    <a onclick="selectChar(this.id)" id="{{ c.id }}"><img src="{{ c.pic }}"></a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="sub_container_body">
+            {% include 'content/builder/characterStats.html' %}
+        </div>
+    </div>
+    <!-- <div class="divider"></div> -->
+    <div class="sub_container">
+
+        <div class=sub_container_header>
+            <div class="tab">
+                <button class="tab_button active" onclick="tabChange(event, 'weapon')" id="defaultOpen">Weapon</button>
+                <button class="tab_button" onclick="tabChange(event, 'artifacts')">Artifacts</button>
+            </div>
+        </div>
+
+        <div class="sub_container_body">
+            <div id="weapon" class="tab_content">
+                {% include 'content/builder/weaponStats.html' %}
+            </div>
+            <div id="artifacts" class="tab_content">
+                12123
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("defaultOpen").click();
+
+    function tabChange(event, tab) {
+
+        var content = document.getElementsByClassName("tab_content");
+        for (i = 0; i < content.length; i++) {
+            content[i].style.display = "none";
+        }
+
+        var buttons = document.getElementsByClassName("tab_button");
+        for (i = 0; i < buttons.length; i++) {
+            buttons[i].className = buttons[i].className.replace(" active", "");
+        }
+
+        document.getElementById(tab).style.display = "block";
+        event.currentTarget.className += " active";
+
+    }
+
+    function charSelection() {
+
+        var selectionArea = document.getElementById("char_selection")
+
+        selectionArea.classList.toggle("active")
+
+    }
+
+    function selectChar(id) {
+        document.getElementById("char_id").value = id
+        document.getElementById("select_character").submit()
+    }
+</script>
+<script type="text/javascript" src="{% static '/js/selection.js' %}"></script>
+
+{% endblock %}

@@ -2,6 +2,8 @@ from django.db import models
 
 class Character(models.Model):
     name        = models.TextField(max_length=100)
+    pic         = models.TextField(default="")
+    user        = models.IntegerField(default=1) # 1 - sword, 2 - claymore, 3 - polearm, 4 - bow, 5 - catalyst
     hp          = models.FloatField()
     attack      = models.FloatField()
     defence     = models.FloatField()
