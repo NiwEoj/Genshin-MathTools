@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'pages',
     'models.character',
     'models.weapon',
+    'models.artifact',
 ]
 
 MIDDLEWARE = [
