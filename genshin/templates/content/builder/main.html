@@ -1,5 +1,4 @@
 {% extends 'base/base.html' %}
-{% load static from static %}
 
 {% block content %}
 
@@ -127,8 +126,8 @@
             <div id="weapon">
                 {% include 'content/builder/weaponStats.html' %}
             </div>
-            <div id="artifacts">
-                12123
+            <div id="artifacts" style="padding: 0 15px 0 15px;">
+                {% include 'content/builder/artifactsStats.html' %}
             </div>
         </div>
     </div>
@@ -136,23 +135,6 @@
 
 <script>
     document.getElementById("defaultOpen").click();
-
-    function tabChange(event, tab) {
-
-        var content = document.getElementsByClassName("tab_content");
-        for (i = 0; i < content.length; i++) {
-            content[i].style.display = "none";
-        }
-
-        var buttons = document.getElementsByClassName("tab_button");
-        for (i = 0; i < buttons.length; i++) {
-            buttons[i].className = buttons[i].className.replace(" active", "");
-        }
-
-        document.getElementById(tab).style.display = "block";
-        event.currentTarget.className += " active";
-
-    }
 
     function charSelection() {
 
@@ -170,6 +152,5 @@
         document.getElementById("select_character").submit()
     }
 </script>
-<script type="text/javascript" src="{% static '/js/selection.js' %}"></script>
 
 {% endblock %}

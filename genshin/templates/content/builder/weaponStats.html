@@ -1,89 +1,65 @@
 <style>
-    .stats_table {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .right {
-        display: flex;
-        align-items: center;
-    }
-
-    .stats_table table {
-        border-collapse: collapse;
-        width: 700px;
-    }
-
-    .stats_table th,
-    td {
-        border-bottom: 3px solid #2B3035;
-        color: white;
-        padding: 6px 15px 6px 15px;
-
-    }
-
-    .stats_table td {
-        background: #343A40;
-    }
-
-    .stat_header {
-        background: #212529;
-        text-align: left;
-    }
-
-    .stat_value {
-        width: 20%;
-        text-align: center;
-
-    }
 </style>
 
-<div class="stats_table">
-    <!-- <div class="left">
-        <select id="weapons" onchange="weaponSelection()">
-            {% for w in weapon %}
-            <option value={{ forloop.counter0 }}>{{ w.name }}</option>
-            {% endfor %}
-        </select>
-    </div> -->
-    <!-- <div class="right">
-        <table style="width: 400px;">
-            <tr>
-                <th colspan="2" class="stat_header">Mistsplitter Reforged</th>
-            </tr>
-            <tr>
-                <td class="stat_title">Rarity</td>
-                <td class="stat_value">5</td>
-            </tr>
-            <tr>
-                <th colspan="2" class="stat_header">Base Stat</th>
-            </tr>
-            <tr>
-                <td class="stat_title">Base Attack</td>
-                <td class="stat_value">48</td>
-            </tr>
-            <tr>
-                <th colspan="2" class="stat_header">Seconday Stat</th>
-            </tr>
-            <tr>
-                <td class="stat_title">Crit Dmg</td>
-                <td class="stat_value">9.6</td>
-            </tr>
-            <tr>
-                <th colspan="2" class="stat_header">Passive</th>
-            </tr>
-            <tr>
-                <td colspan="2" class="stat_title">
-                    <p style="text-align: justify;">Gain a 12% Elemental DMG Bonus for every element and receive the might of Mistsplitter's Emblem. At stack levels 1/2/3, Mistsplitter's
-                        Emblem
-                        provides a 8/16/28% Elemental DMG
-                        Bonus for the character's Elemental Type. The character will obtain 1 stack of Mistsplitter's Emblem in each of the following scenarios: Normal Attack deals Elemental
-                        DMG
-                        (stack lasts 5s), casting Elemental Burst (stack lasts 10s); Energy is less than 100% (stack disappears when Energy is full). Each stack's duration is calculated
-                        independently.
-                    </p>
-                </td>
-            </tr>
-        </table>
-    </div> -->
+<div class=sub_container_header>
+    <form id="select_character" method="GET" action="{% url 'builder' %}">
+                <input type="hidden" value="" id="char_id" name="character">
+            </form>
+    <h1 style="padding: 0 15px 0 15px;">Mistsplitter Reforged<i class="arrow down" id="arrow1" onclick="weaponSelection()"></i></h1>
+    <div class="selection_area" id="char_selection">
+                {% for c in characters %}
+                <div class="character_button">
+                    <a onclick="selectChar(this.id)" id="{{ c.id }}"><img src="{{ c.pic }}"></a>
+                </div>
+                {% endfor %}
+            </div>
 </div>
+<div class="stats_table">
+    <table>
+        <tr>
+            <th colspan="2" class="stat_header">Main Stat</th>
+            <th colspan="2" class="stat_header">Secondary Stat</th>
+        </tr>
+        <tr>
+            <td class="stat_title">Base ATK</td>
+            <td class="stat_value">-</td>
+            <td class="stat_title">Crit Rate</td>
+            <td class="stat_value">-</td>
+        </tr>
+        <tr>
+            <th colspan="4" class="stat_header">Main Stat</th>
+        </tr>
+        <tr>
+            <td colspan="4" class="stat_title">
+                <p style="text-align: justify;">Gain a 12% Elemental DMG Bonus for every element and receive the might of Mistsplitter's Emblem. At stack levels 1/2/3, Mistsplitter's
+                    Emblem
+                    provides a 8/16/28% Elemental DMG
+                    Bonus for the character's Elemental Type. The character will obtain 1 stack of Mistsplitter's Emblem in each of the following scenarios: Normal Attack deals Elemental
+                    DMG
+                    (stack lasts 5s), casting Elemental Burst (stack lasts 10s); Energy is less than 100% (stack disappears when Energy is full). Each stack's duration is calculated
+                    independently.
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    document.getElementById("defaultOpen").click();
+
+    function charSelection() {
+
+        var selectionArea = document.getElementById("char_selection")
+        var arrow = document.getElementById("arrow1")
+
+        selectionArea.classList.toggle("active")
+        arrow.classList.toggle("up");
+        arrow.classList.toggle("down");
+
+    }
+
+    function selectChar(id) {
+        document.getElementById("char_id").value = id
+        document.getElementById("select_character").submit()
+    }
+</script>
