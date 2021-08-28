@@ -17,9 +17,9 @@ artDB = {'Name':['glad','cw','shimenawa','hod','fate','bc','pf','no','wt','schol
          'twopc':['Atk','Edmg','Atk','Edmg','ER','Pdmg','Pdmg','Burst','EM','ER','Atk'],
          'twopcelem':['n','pyro','n','hydro','n','n','n','n','n','n','n'],
          'twopcStt':[.18,.15,.18,.15,.2,.25,.25,.2,80,.2,.18],
-         'fourpc':[('normal'),('reactbnsA','reactbnsT','Edmg'),('normal','charge','plunge'),('normal','charge'),(''),('charge'),('atk','Pdmg'),(''),('charge'),(''),('normal','charge')],
-         'fourpcstacks':[(1),(1,1,3),(1,1,1),(1,1),(1),(1),(2,1),(1),(1),(1),(1,1)],
-         'fourpcStt':[(.35),(.15,.4,.075),(.5,.5,.5),(.3,.3),(),(.5),(.09,.25),(),(.35),(),(.25,.25)],
+         'fourpc':[('normal',),('reactbnsA','reactbnsT','Edmg'),('normal','charge','plunge'),('normal','charge'),('',),('charge',),('atk','Pdmg'),('',),('charge',),('',),('normal','charge')],
+         'fourpcstacks':[(1,),(1,1,3),(1,1,1),(1,1),(1,),(1,),(2,1),(1,),(1,),(1,),(1,1)],
+         'fourpcStt':[(.35,),(.15,.4,.075),(.5,.5,.5),(.3,.3),(None,),(.5,),(.09,.25),(None,),(.35,),(None,),(.25,.25)],
          'fourpcreactT':[(),('ov','burn'),(),(),(),(),(),(),(),(),()]}
 
 # uptime = (period of time when passive is up) / (period of time for a rotation)
@@ -41,7 +41,7 @@ def artDef(artName,pcnum,stack=1,uptime=1):
     elif artDB['twopc'] == 'ER':
         ttler = ttler + artDB['twopcStt'][idx]
     if pcnum >= 4:
-        for i in range(len(artDB['fourpc'][idx])):                          # len of length=1 tuple got fetched as string instead of tuple
+        for i in range(len(artDB['fourpc'][idx])):                          
             stacks = min(stack,artDB['fourpcstacks'][idx][i])
             if artDB['fourpc'][idx][i] == 'normal':
                 ttldmgbnsE[0] = ttldmgbnsE[0] + artDB['fourpcStt'][idx][i] * uptime
