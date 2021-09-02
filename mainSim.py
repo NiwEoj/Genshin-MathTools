@@ -24,10 +24,13 @@ artDB = {'Name':['glad','cw','shimenawa','hod','fate','bc','pf','no','wt','schol
 charatk = 244
 chardef = 594
 charhp = 9189
-ascatk,asccrit,ascem = (.24,0,0)
+chrelem = 'electro'
+ascatk,asccrit,ascem,ascer = (.24,0,0,0)
 lvmulti = 725                         # base dmg at lv70, 80, 90 is 383, 540, 725
 numOfWpn = len(wpnoptions['Name'])
 reaction = 'ov'
+enemresA,enemresT,enemresP = (.1,.1,.1)
+resreducA,resreducT,resreducP = (0,0,0)
 
 # mv is motion value for elemental dmg, mvP is for physical; mv[0] is mv per second of normals, [3] and [4] is mv per second of charge and plunge. 
 # [1] and [2] is total mv, not mv per second 
@@ -51,9 +54,21 @@ fig,ax = plt.subplots(rows, columns)
 # number of sims
 N = 500
 
-def artDef(artName,pcnum,stack=1,uptime=1):
+# calculate enemy resistance
+def resCalc(enemres,resreduc):
+    resmulti = enemres - resreduc
+    if resmulti < 0:
+        resmulti = 1 - (resmulti / 2)
+    elif resmulti < .75:
+        resmulti = 1 - resmulti
+    else:
+        resmulti = 1 / (4 * resmulti + 1)
+    return resmulti
+
+# adding in passives from artifacts
+def artDef(idx,pcnum,stack=1,uptime=1):
     global ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit
-    idx = artDB['Name'].index(artName)
+    artName = artDB['Name'][idx]
     if artDB['twopc'][idx] == 'Atk':
         ttlatkp = ttlatkp + artDB['twopcStt'][idx]
     elif artDB['twopc'][idx] == 'Pdmg':
@@ -98,9 +113,95 @@ def artDef(artName,pcnum,stack=1,uptime=1):
             elif artDB['fourpc'][idx][i] == 'atk':
                 ttlatkp = ttlatkp + artDB['fourpcStt'][idx][i] * stacks * uptime
             elif artDB['fourpc'][idx][i] == 'crit':
-                ttlcrit = ttlcrit + .2 * stacks
-        if artName == 'fate':
-            ttldmgbnsE[2] = ttldmgbnsE[2] + min(ttler * .25,.75)             
+                ttlcrit = ttlcrit + .2 * stacks           
+
+# calculating damage
+def Damage():
+    hatk = 0
+    crit,effatk = ([0]*N,[0]*N)
+    artName = artDB['Name'][artone] 
+    if (reaction == 'vape') or (reaction == 'melt'):
+        for i in range(N):
+            dmgbns = rd.randint(0,1) * .466
+            rem = artiq - dmgbns/.75
+            atk = 0.75*rd.uniform(.622,rem) 
+            rem = rem - atk/.75
+            em = rd.uniform(0,rem) * 300
+            rem = rem - em/300
+            emmultiA = 2.78 * (ttlem + em) / (ttlem + em + 1400) + ttlreactbnsA 
+            emmultiT = 16 * (ttlem + em) / (ttlem + em + 2000) + ttlreactbnsT + 1
+            crit[i] = (rem + ttlcdmg + 2*ttlcrit)/4 
+            cdmg =  max(crit[i]*2 ,ttlcdmg)
+            if artName == 'fate':
+                fatedmgbns = ttldmgbnsE[2]
+                ttldmgbnsE[2] = ttldmgbnsE[2] + min(ttler * .25,.75) 
+            for m in range(len(ttldmgbnsE)):
+                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsE[m] + dmgbns + 1) * mv[m] * sklweight[m] * (1 + reactmulti * emmultiA * rAuptime[m]) * resmultiA * defmulti
+                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsP[m] + dmgbns + 1) * mvP[m] * sklweight[m] * resmultiP * defmulti
+            if effatk[i] > hatk:
+                hatk = effatk[i] 
+                optcrit = crit[i] 
+                optcdmg = cdmg 
+                optatk = ttlatkp + atk + 311/baseatk[n]
+                optdmgbns = dmgbns 
+                optem = ttlem + em
+                opter = ttler
+            if artName == 'fate':
+                ttldmgbnsE[2] = fatedmgbns
+    elif (tdmg > 0):
+        for i in range(N):
+            dmgbns = rd.randint(0,1) * .466
+            rem = artiq - dmgbns/.75
+            atk = 0.75*rd.uniform(.622,rem) 
+            rem = rem - atk/.75
+            em = rd.uniform(0,rem) * 300
+            rem = rem - em/300
+            emmultiA = 2.78 * (ttlem + em) / (ttlem + em + 1400) + ttlreactbnsA 
+            emmultiT = 16 * (ttlem + em) / (ttlem + em + 2000) + ttlreactbnsT + 1
+            crit[i] = (rem + ttlcdmg + 2*ttlcrit)/4 
+            cdmg =  max(crit[i]*2 ,ttlcdmg)
+            if artName == 'fate':
+                fatedmgbns = ttldmgbnsE[2]
+                ttldmgbnsE[2] = ttldmgbnsE[2] + min(ttler * .25,.75) 
+            for m in range(len(ttldmgbnsE)):
+                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsE[m] + dmgbns + 1) * mv[m] * sklweight[m] * resmultiA * defmulti 
+                effatk[i] = effatk[i] + tdmg * emmultiT * rTuptime[m] * resmultiT 
+                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsP[m] + dmgbns + 1) * mvP[m] * sklweight[m] * resmultiP * defmulti
+            if effatk[i] > hatk:
+                hatk = effatk[i] 
+                optcrit = crit[i] 
+                optcdmg = cdmg 
+                optatk = ttlatkp + atk + 311/baseatk[n]
+                optdmgbns = dmgbns 
+                optem = ttlem + em
+                opter = ttler
+            if artName == 'fate':
+                ttldmgbnsE[2] = fatedmgbns
+    else:
+        for i in range(N):
+            dmgbns = rd.randint(0,1) * .466
+            rem = artiq - dmgbns/.75
+            atk = 0.75*rd.uniform(.622,rem) 
+            rem = rem - atk/.75
+            crit[i] = (rem + ttlcdmg + 2*ttlcrit)/4 
+            cdmg =  max(crit[i]*2 ,ttlcdmg)
+            if artName == 'fate':
+                fatedmgbns = ttldmgbnsE[2]
+                ttldmgbnsE[2] = ttldmgbnsE[2] + min(ttler * .25,.75) 
+            for m in range(len(ttldmgbnsE)):
+                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsE[m] + dmgbns + 1) * mv[m] * sklweight[m] * resmultiA * defmulti
+                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsP[m] + dmgbns + 1) * mvP[m] * sklweight[m] * resmultiP * defmulti
+            if effatk[i] > hatk:
+                hatk = effatk[i] 
+                optcrit = crit[i] 
+                optcdmg = cdmg 
+                optatk = ttlatkp + atk + 311/baseatk[n]
+                optdmgbns = dmgbns 
+                optem = ttlem 
+                opter = ttler
+            if artName == 'fate':
+                ttldmgbnsE[2] = fatedmgbns
+    return hatk,optcrit,optcdmg,optatk,optdmgbns,optem,opter
 
 if reaction == 'vape':
     reactmulti = 1.5 
@@ -135,21 +236,19 @@ else:
     tdmg = 0
 
 # Monte-carlo sim
-hatk = [0]*numOfWpn
-optcrit = [0]*numOfWpn
-optcdmg = [0]*numOfWpn
-optatk = [0]*numOfWpn
-baseatk = [0]*numOfWpn
-optdmgbns,optem = ([0]*numOfWpn,[0]*numOfWpn)
-defmulti = 0.5
-j = 0
-k = 0
-
+artList = []
+wpnList = []
+combiLen = 300
+hatk,baseatk = ([],[0]*numOfWpn)
+optcrit,optcdmg,optatk,optdmgbns,optem,opter = ([],[],[],[],[],[])
+defmulti = 0.5                                  # expand later
+j,k,nu = (0,0,0)
+resmultiA = resCalc(enemresA,resreducA)
+resmultiT = resCalc(enemresT,resreducT)
+resmultiP = resCalc(enemresP,resreducP)
 for n in range(numOfWpn):
-    crit = [0]*N
-    effatk = [0]*N
     wpnatk = wpnoptions['BaseAtk'][n]
-    wpnatkp,wpncrit,wpncdmg,wpnem = (0,0,0,0)
+    wpnatkp,wpncrit,wpncdmg,wpnem,wpner = (0,0,0,0,0)
     if wpnoptions['scdSttType'][n] == 'Atk':
         wpnatkp = wpnoptions['scdStt'][n]
     elif wpnoptions['scdSttType'][n] == 'Crt':
@@ -158,102 +257,93 @@ for n in range(numOfWpn):
         wpncdmg = wpnoptions['scdStt'][n]
     elif wpnoptions['scdSttType'][n] == 'Em':
         wpnem = wpnoptions['scdStt'][n]
+    elif wpnoptions['scdSttType'][n] == 'Er':
+        wpner = wpnoptions['scdStt'][n]
     ttlatkp = ascatk + wpnatkp
     ttlcrit = .05 + wpncrit + asccrit
     ttlcdmg = .5 + wpncdmg
     ttldmgbnsE = [0]*5
     ttldmgbnsP = [0]*5
     ttlem = wpnem + ascem
+    ttler = 1 + wpner + ascer
     ttlreactbnsA = 0
     ttlreactbnsT = 0
     baseatk[n] = charatk + wpnatk
-    if (reaction == 'vape') or (reaction == 'melt'):
-        for i in range(N):
-            dmgbns = rd.randint(0,1) * .466
-            rem = artiq - dmgbns/.75
-            atk = 0.75*rd.uniform(.622,rem) 
-            rem = rem - atk/.75
-            em = rd.uniform(0,rem) * 300
-            rem = rem - em/300
-            emmultiA = 2.78 * (ttlem + em) / (ttlem + em + 1400) + ttlreactbnsA 
-            emmultiT = 16 * (ttlem + em) / (ttlem + em + 2000) + ttlreactbnsT + 1
-            crit[i] = (rem + ttlcdmg + 2*ttlcrit)/4 
-            cdmg =  max(crit[i]*2 ,ttlcdmg)
-            for m in range(len(ttldmgbnsE)):
-                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsE[m] + dmgbns + 1) * mv[m] * sklweight[m] * (1 + reactmulti * emmultiA * rAuptime[m]) * defmulti
-                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsP[m] + dmgbns + 1) * mvP[m] * sklweight[m] * defmulti
-            if effatk[i] > hatk[n]:
-                hatk[n] = effatk[i] 
-                optcrit[n] = crit[i] 
-                optcdmg[n] = cdmg 
-                optatk[n] = atk + ascatk + 311/baseatk[n]
-                optdmgbns[n] = dmgbns 
-                optem[n] = ttlem + em
-    elif (tdmg > 0):
-        for i in range(N):
-            dmgbns = rd.randint(0,1) * .466
-            rem = artiq - dmgbns/.75
-            atk = 0.75*rd.uniform(.622,rem) 
-            rem = rem - atk/.75
-            em = rd.uniform(0,rem) * 300
-            rem = rem - em/300
-            emmultiA = 2.78 * (ttlem + em) / (ttlem + em + 1400) + ttlreactbnsA 
-            emmultiT = 16 * (ttlem + em) / (ttlem + em + 2000) + ttlreactbnsT + 1
-            crit[i] = (rem + ttlcdmg + 2*ttlcrit)/4 
-            cdmg =  max(crit[i]*2 ,ttlcdmg)
-            for m in range(len(ttldmgbnsE)):
-                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsE[m] + dmgbns + 1) * mv[m] * sklweight[m] * defmulti 
-                effatk[i] = effatk[i] + tdmg * emmultiT * rTuptime[m] 
-                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsP[m] + dmgbns + 1) * mvP[m] * sklweight[m] * defmulti
-            if effatk[i] > hatk[n]:
-                hatk[n] = effatk[i] 
-                optcrit[n] = crit[i] 
-                optcdmg[n] = cdmg 
-                optatk[n] = atk + ascatk + 311/baseatk[n]
-                optdmgbns[n] = dmgbns 
-                optem[n] = ttlem + em
-    else:
-        for i in range(N):
-            dmgbns = rd.randint(0,1) * .466
-            rem = artiq - dmgbns/.75
-            atk = 0.75*rd.uniform(.622,rem) 
-            rem = rem - atk/.75
-            crit[i] = (rem + ttlcdmg + 2*ttlcrit)/4 
-            cdmg =  max(crit[i]*2 ,ttlcdmg)
-            for m in range(len(ttldmgbnsE)):
-                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsE[m] + dmgbns + 1) * mv[m] * sklweight[m] * defmulti
-                effatk[i] = effatk[i] + (1 + crit[i]*(cdmg)) * ((baseatk[n])*(1 + ttlatkp + atk)+311) * (ttldmgbnsP[m] + dmgbns + 1) * mvP[m] * sklweight[m] * defmulti
-            if effatk[i] > hatk[n]:
-                hatk[n] = effatk[i] 
-                optcrit[n] = crit[i] 
-                optcdmg[n] = cdmg 
-                optatk[n] = atk + ascatk + 311/baseatk[n]
-                optdmgbns[n] = dmgbns 
-                optem[n] = ttlem 
+    artone = 0
+    A,B,C,D,E,F,G,H = (ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit)
+    while artone < len(artDB['Name']):
+        name1 = artDB['Name'][artone]
+        for arttwo in range(artone+1,len(artDB['Name'])):
+            ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit = A,B,C,D,E,F,G,H
+            artDef(artone,2)
+            artDef(arttwo,2)
+            DMG = Damage()
+            hatk.append(DMG[0])
+            optcrit.append(DMG[1])
+            optcdmg.append(DMG[2])
+            optatk.append(DMG[3])
+            optdmgbns.append(DMG[4])
+            optem.append(DMG[5])
+            opter.append(DMG[6])
+            name2 = artDB['Name'][arttwo]
+            artList.append(name1 + ' & ' + name2) 
+            wpnList.append(n)
+        lendiff = sum(list(artDB['fourpcstacks'][artone])) - len(artDB['fourpcstacks'][artone])  
+        if lendiff > 0:
+            for ii in range(lendiff):
+                ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit = A,B,C,D,E,F,G,H
+                artDef(artone,4,stack=ii+1)
+                DMG = Damage()
+                hatk.append(DMG[0])
+                optcrit.append(DMG[1])
+                optcdmg.append(DMG[2])
+                optatk.append(DMG[3])
+                optdmgbns.append(DMG[4])
+                optem.append(DMG[5])
+                opter.append(DMG[6])
+                artList.append('4pc ' + name1 + ' (' + str(ii+1) + ' stack)')
+                wpnList.append(n)
+        else: 
+            ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit = A,B,C,D,E,F,G,H
+            artDef(artone,4)
+            DMG = Damage()
+            hatk.append(DMG[0])
+            optcrit.append(DMG[1])
+            optcdmg.append(DMG[2])
+            optatk.append(DMG[3])
+            optdmgbns.append(DMG[4])
+            optem.append(DMG[5])
+            opter.append(DMG[6])
+            artList.append('4pc ' + name1)
+            wpnList.append(n)
+        artone = artone + 1
 
-    # plot graph
-    ax[j,k].scatter(crit,effatk)
-    ax[j,k].set_title(wpnoptions['Name'][n])
-    ax[j,k].set_xlabel('Crit rate')
-    ax[j,k].set_ylabel('Effective attack')
-    if k == columns-1:
-        j = j + 1
-        k = 0
-    else:
-        k = k + 1
+      
+            # plot graph
+            # ax[j,k].scatter(crit,effatk)
+            # ax[j,k].set_title(wpnoptions['Name'][n])
+            # ax[j,k].set_xlabel('Crit rate')
+            # ax[j,k].set_ylabel('Effective attack')
+            # if k == columns-1:
+            #     j = j + 1
+            #     k = 0
+            # else:
+            #     k = k + 1
 
 # print additional info
-print("Best performing weapon is",wpnoptions['Name'][hatk.index(max(hatk))])
-dic = {'Name':[],'Optimum Attack':[],'Optimum Crit Rate':[],'Optimum Crit Dmg':[],'Optimum Dmg Bns':[],'Optimal EM':[]}
-for n in range(numOfWpn):
-    dic['Name'] = dic['Name'] + [wpnoptions['Name'][n]]
-    dic['Optimum Attack'] = dic['Optimum Attack'] + [round((optatk[n] + 1)*baseatk[n])]
-    dic['Optimum Crit Rate'] = dic['Optimum Crit Rate'] + [str(round(optcrit[n]*100,1)) + "%"]
-    dic['Optimum Crit Dmg'] = dic['Optimum Crit Dmg'] + [str(round(optcdmg[n]*100,1)) + "%"]
-    dic['Optimum Dmg Bns'] = dic['Optimum Dmg Bns'] + [str(round(optdmgbns[n]*100,1)) + "%"]
-    dic['Optimal EM'] = dic['Optimal EM'] + [str(round(optem[n]))]
-print(pd.DataFrame(dic))
+dic = {'Weapon':[],'Artifact':artList,'Damage':[],'Optimum Attack':[],'Optimum Crit Rate %':[],'Optimum Crit Dmg %':[],'Optimum Dmg Bns %':[],'Optimal EM':[],'Optimum ER %':[]}
+for n in range(len(wpnList)):
+    dic['Weapon'] = dic['Weapon'] + [wpnoptions['Name'][wpnList[n]]]
+    dic['Damage'] = dic['Damage'] + [round(hatk[n])]
+    dic['Optimum Attack'] = dic['Optimum Attack'] + [round((optatk[n] + 1)*baseatk[wpnList[n]])]
+    dic['Optimum Crit Rate %'] = dic['Optimum Crit Rate %'] + [round(optcrit[n]*100,1)]
+    dic['Optimum Crit Dmg %'] = dic['Optimum Crit Dmg %'] + [round(optcdmg[n]*100,1)]
+    dic['Optimum Dmg Bns %'] = dic['Optimum Dmg Bns %'] + [round(optdmgbns[n]*100,1)]
+    dic['Optimal EM'] = dic['Optimal EM'] + [round(optem[n])]
+    dic['Optimum ER %'] = dic['Optimum ER %'] + [round(opter[n]*100,1)]
+df = pd.DataFrame(dic)
+print(df.sort_values(by=['Damage'],ascending=False).head(60))
 
 stop = timeit.default_timer()
 print('Time: ', stop - start)
-plt.show()
+

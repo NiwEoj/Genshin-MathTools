@@ -1,4 +1,5 @@
 from collections import Counter
+import pandas as pd
 
 chrelem,chrwpn = ('pyro','gs')
 reaction = 'vape'
@@ -80,10 +81,3 @@ if b[0][1] > 1:
     artDef(b[0][0],b[0][1])
 if b[1][1] > 1:
     artDef(b[1][0],b[1][1])
-
-print('ttlatkp: ',ttlatkp)
-print('ttldmgbnsE: ',ttldmgbnsE)
-print('ttldmgbnsP: ',ttldmgbnsP)
-print('ttlreactbnsA: ',ttlreactbnsA)
-print('ttlreactbnsT: ',ttlreactbnsT)
-
