@@ -4,48 +4,18 @@
 
 <style>
     .container {
-        /* margin: 1%; */
         width: 100%;
         color: white;
-        display: inline-grid;
-        grid-template-columns: 50% 50%;
     }
 
-    .sub_container {
+    .configuration_container {
         background-color: #343A40;
-        margin: 2%
+        margin: 10px;
+        display: flex;
     }
 
-    .sub_container_header {
-        margin-bottom: 1%;
-        width: inherit;
-
-    }
-
-    .sub_container_body_item {
-        margin-right: 1%;
-    }
-
-    .tab {
-        overflow: hidden;
-    }
-
-    .tab_button {
-        background-color: #343A40;
-        color: white;
-        outline: none;
-        border: none;
-        float: left;
-        cursor: pointer;
-        padding: 10px;
-    }
-
-    .tab_button.active {
-        background-color: #212529;
-    }
-
-    .tab_content {
-        display: none;
+    .configuration_container_item{
+        width: 50%;
     }
 
     .selection_area {
@@ -103,39 +73,39 @@
 </style>
 
 <div class="container">
-    <div class="sub_container">
-        <div class=sub_container_header>
-            <form id="select_character" method="GET" action="{% url 'builder' %}">
-                <input type="hidden" value="" id="char_id" name="character">
-            </form>
-            <h1 style="padding: 0 15px 0 15px;">{{ selected_char.name }}<i class="arrow down" id="arrow1" onclick="charSelection(this)"></i></h1>
-            <div class="selection_area" id="char_selection">
-                {% for c in characters %}
-                <div class="character_button">
-                    <a onclick="selectChar(this.id)" id="{{ c.id }}"><img src="{{ c.pic }}"></a>
+    <div class="configuration_container">
+        <div class="configuration_container_item">
+            <div class=sub_container_header>
+                <form id="select_character" method="GET" action="{% url 'builder' %}">
+                    <input type="hidden" value="" id="char_id" name="character">
+                </form>
+                <h1 style="padding: 0 15px 0 15px;">{{ selected_char.name }}<i class="arrow down" id="arrow1" onclick="charSelection(this)"></i></h1>
+                <div class="selection_area" id="char_selection">
+                    {% for c in characters %}
+                    <div class="character_button">
+                        <a onclick="selectChar(this.id)" id="{{ c.id }}"><img src="{{ c.pic }}"></a>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+            </div>
+            <div class="sub_container_body">
+                {% include 'content/builder/characterStats.html' %}
             </div>
         </div>
-        <div class="sub_container_body">
-            {% include 'content/builder/characterStats.html' %}
-        </div>
-    </div>
-    <div class="sub_container">
-        <div class="sub_container_body">
-            <div id="weapon">
-                {% include 'content/builder/weaponStats.html' %}
-            </div>
-            <div id="artifacts" style="padding: 0 15px 0 15px;">
-                {% include 'content/builder/artifactsStats.html' %}
+        <div class="configuration_container_item">
+            <div class="sub_container_body">
+                <div id="weapon">
+                    {% include 'content/builder/weaponStats.html' %}
+                </div>
+                <div id="artifacts" style="padding: 0 15px 0 15px;">
+                    {% include 'content/builder/artifactsStats.html' %}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    document.getElementById("defaultOpen").click();
-
     function charSelection() {
 
         var selectionArea = document.getElementById("char_selection")

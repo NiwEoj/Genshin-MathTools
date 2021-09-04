@@ -10,19 +10,19 @@ def builder_view(request, *args, **kwargs):
 
     characters = Character.objects.all();
 
-    if request.method == "GET" and 'character' in request.GET:
-        form = Form(request.GET)
-        if form.is_valid():
-            selected_char = Character.objects.get(id=form.data['character'])
-    else:
-        selected_char = Character.objects.get(id=1)
+    # if request.method == "GET" and 'character' in request.GET:
+    #     form = Form(request.GET)
+    #     if form.is_valid():
+    #         selected_char = Character.objects.get(id=form.data['character'])
+    # else:
+    #     selected_char = Character.objects.get(id=1)
 
-    weapon = Weapon.objects.filter(type=selected_char.user)
+    # weapon = Weapon.objects.filter(type=selected_char.user)
 
     context = {
-        "characters": characters,
-        "selected_char": selected_char,
-        "weapon": weapon
+        "characters": characters
+        # "selected_char": selected_char,
+        # "weapon": weapon
     }
 
     return render(request, "content/builder/main.html", context)
