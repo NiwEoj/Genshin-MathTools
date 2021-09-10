@@ -24,9 +24,9 @@ artDB = {'Name':['glad','cw','shimenawa','hod','fate','bc','pf','no','wt','schol
 charatk = 244
 chardef = 594
 charhp = 9189
-chrelem = 'electro'
-ascatk,asccrit,ascem,ascer = (.24,0,0,0)
-lvmulti = 725                         # base dmg at lv70, 80, 90 is 383, 540, 725
+chrelem,chrwpn = ('electro','bow')
+ascatk,asccrit,ascem,ascer,aschp,ascdef = (.24,0,0,0,0,0)
+lvmulti = 725                         # base transformative dmg. Base dmg at lv70, 80, 90 is 383, 540, 725
 numOfWpn = len(wpnoptions['Name'])
 reaction = 'ov'
 enemresA,enemresT,enemresP = (.1,.1,.1)
@@ -83,18 +83,28 @@ def artDef(idx,pcnum,stack=1,uptime=1):
         ttlem = ttlem + artDB['twopcStt'][idx]
     elif artDB['twopc'] == 'ER':
         ttler = ttler + artDB['twopcStt'][idx]
+    elif artDB['twopc'] == 'HP':
+        ttlhpp = ttlhpp + artDB['twopcStt'][idx]
     if pcnum >= 4:
         for i in range(len(artDB['fourpc'][idx])):                          
             stacks = min(stack,artDB['fourpcstacks'][idx][i])
             if artDB['fourpc'][idx][i] == 'normal':
-                ttldmgbnsE[0] = ttldmgbnsE[0] + artDB['fourpcStt'][idx][i] * uptime
-                ttldmgbnsP[0] = ttldmgbnsP[0] + artDB['fourpcStt'][idx][i] * uptime
+                if (artName!='glad'):
+                    ttldmgbnsE[0] = ttldmgbnsE[0] + artDB['fourpcStt'][idx][i] * uptime
+                    ttldmgbnsP[0] = ttldmgbnsP[0] + artDB['fourpcStt'][idx][i] * uptime
+                elif (chrwpn=='sword') or (chrwpn=='claymore') or (chrwpn=='polearm'):
+                    ttldmgbnsE[0] = ttldmgbnsE[0] + artDB['fourpcStt'][idx][i] * uptime
+                    ttldmgbnsP[0] = ttldmgbnsP[0] + artDB['fourpcStt'][idx][i] * uptime
             elif artDB['fourpc'][idx][i] == 'burst':
                 ttldmgbnsE[2] = ttldmgbnsE[2] + artDB['fourpcStt'][idx][i] * uptime
                 ttldmgbnsP[2] = ttldmgbnsP[2] + artDB['fourpcStt'][idx][i] * uptime 
             elif artDB['fourpc'][idx][i] == 'charge':
-                ttldmgbnsE[3] = ttldmgbnsE[3] + artDB['fourpcStt'][idx][i] * uptime 
-                ttldmgbnsP[3] = ttldmgbnsP[3] + artDB['fourpcStt'][idx][i] * uptime 
+                if (artName!='wt'):
+                    ttldmgbnsE[3] = ttldmgbnsE[3] + artDB['fourpcStt'][idx][i] * uptime 
+                    ttldmgbnsP[3] = ttldmgbnsP[3] + artDB['fourpcStt'][idx][i] * uptime 
+                elif (chrwpn=='bow') or (chrwpn=='catalyst'):
+                    ttldmgbnsE[3] = ttldmgbnsE[3] + artDB['fourpcStt'][idx][i] * uptime 
+                    ttldmgbnsP[3] = ttldmgbnsP[3] + artDB['fourpcStt'][idx][i] * uptime 
             elif artDB['fourpc'][idx][i] == 'plunge':
                 ttldmgbnsE[4] = ttldmgbnsE[4] + artDB['fourpcStt'][idx][i] * uptime 
                 ttldmgbnsP[4] = ttldmgbnsP[4] + artDB['fourpcStt'][idx][i] * uptime 
@@ -113,7 +123,7 @@ def artDef(idx,pcnum,stack=1,uptime=1):
             elif artDB['fourpc'][idx][i] == 'atk':
                 ttlatkp = ttlatkp + artDB['fourpcStt'][idx][i] * stacks * uptime
             elif artDB['fourpc'][idx][i] == 'crit':
-                ttlcrit = ttlcrit + .2 * stacks           
+                ttlcrit = ttlcrit + artDB['fourpcStt'][idx][i] * stacks * uptime           
 
 # calculating damage
 def Damage():
@@ -248,7 +258,7 @@ resmultiT = resCalc(enemresT,resreducT)
 resmultiP = resCalc(enemresP,resreducP)
 for n in range(numOfWpn):
     wpnatk = wpnoptions['BaseAtk'][n]
-    wpnatkp,wpncrit,wpncdmg,wpnem,wpner = (0,0,0,0,0)
+    wpnatkp,wpncrit,wpncdmg,wpnem,wpner,wpnhp,wpndef = (0,0,0,0,0,0,0)
     if wpnoptions['scdSttType'][n] == 'Atk':
         wpnatkp = wpnoptions['scdStt'][n]
     elif wpnoptions['scdSttType'][n] == 'Crt':
@@ -260,6 +270,8 @@ for n in range(numOfWpn):
     elif wpnoptions['scdSttType'][n] == 'Er':
         wpner = wpnoptions['scdStt'][n]
     ttlatkp = ascatk + wpnatkp
+    ttlhpp = aschp + wpnhp 
+    ttldefp = ascdef + wpndef
     ttlcrit = .05 + wpncrit + asccrit
     ttlcdmg = .5 + wpncdmg
     ttldmgbnsE = [0]*5
@@ -270,11 +282,11 @@ for n in range(numOfWpn):
     ttlreactbnsT = 0
     baseatk[n] = charatk + wpnatk
     artone = 0
-    A,B,C,D,E,F,G,H = (ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit)
-    while artone < len(artDB['Name']):
+    A,B,C,D,E,F,G,H = (ttlatkp,tuple(ttldmgbnsE),tuple(ttldmgbnsP),ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit)
+    while artone < (len(artDB['Name'])-1):
         name1 = artDB['Name'][artone]
         for arttwo in range(artone+1,len(artDB['Name'])):
-            ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit = A,B,C,D,E,F,G,H
+            ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit = A,list(B),list(C),D,E,F,G,H
             artDef(artone,2)
             artDef(arttwo,2)
             DMG = Damage()
@@ -291,7 +303,7 @@ for n in range(numOfWpn):
         lendiff = sum(list(artDB['fourpcstacks'][artone])) - len(artDB['fourpcstacks'][artone])  
         if lendiff > 0:
             for ii in range(lendiff):
-                ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit = A,B,C,D,E,F,G,H
+                ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit = A,list(B),list(C),D,E,F,G,H
                 artDef(artone,4,stack=ii+1)
                 DMG = Damage()
                 hatk.append(DMG[0])
@@ -304,7 +316,7 @@ for n in range(numOfWpn):
                 artList.append('4pc ' + name1 + ' (' + str(ii+1) + ' stack)')
                 wpnList.append(n)
         else: 
-            ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit = A,B,C,D,E,F,G,H
+            ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit = A,list(B),list(C),D,E,F,G,H
             artDef(artone,4)
             DMG = Damage()
             hatk.append(DMG[0])
@@ -317,7 +329,7 @@ for n in range(numOfWpn):
             artList.append('4pc ' + name1)
             wpnList.append(n)
         artone = artone + 1
-
+        
       
             # plot graph
             # ax[j,k].scatter(crit,effatk)

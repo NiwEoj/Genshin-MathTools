@@ -3,6 +3,7 @@ import pandas as pd
 
 chrelem,chrwpn = ('pyro','gs')
 reaction = 'vape'
+ttlhpp = 1
 ttlatkp = 2.2
 ttlcrit = .5
 ttlem = 0
@@ -25,7 +26,7 @@ artDB = {'Name':['glad','cw','shimenawa','hod','fate','bc','pf','no','wt','schol
 
 # uptime = (period of time when passive is up) / (period of time for a rotation)
 def artDef(artName,pcnum,stack=1,uptime=1):
-    global ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit
+    global ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit,ttlhpp
     idx = artDB['Name'].index(artName)
     if artDB['twopc'][idx] == 'Atk':
         ttlatkp = ttlatkp + artDB['twopcStt'][idx]
@@ -41,18 +42,28 @@ def artDef(artName,pcnum,stack=1,uptime=1):
         ttlem = ttlem + artDB['twopcStt'][idx]
     elif artDB['twopc'] == 'ER':
         ttler = ttler + artDB['twopcStt'][idx]
+    elif artDB['twopc'] == 'HP':
+        ttlhpp = ttlhpp + artDB['twopcStt'][idx]
     if pcnum >= 4:
         for i in range(len(artDB['fourpc'][idx])):                          
             stacks = min(stack,artDB['fourpcstacks'][idx][i])
             if artDB['fourpc'][idx][i] == 'normal':
-                ttldmgbnsE[0] = ttldmgbnsE[0] + artDB['fourpcStt'][idx][i] * uptime
-                ttldmgbnsP[0] = ttldmgbnsP[0] + artDB['fourpcStt'][idx][i] * uptime
+                if (artName!='glad'):
+                    ttldmgbnsE[0] = ttldmgbnsE[0] + artDB['fourpcStt'][idx][i] * uptime
+                    ttldmgbnsP[0] = ttldmgbnsP[0] + artDB['fourpcStt'][idx][i] * uptime
+                elif (chrwpn=='sword') or (chrwpn=='claymore') or (chrwpn=='polearm'):
+                    ttldmgbnsE[0] = ttldmgbnsE[0] + artDB['fourpcStt'][idx][i] * uptime
+                    ttldmgbnsP[0] = ttldmgbnsP[0] + artDB['fourpcStt'][idx][i] * uptime
             elif artDB['fourpc'][idx][i] == 'burst':
                 ttldmgbnsE[2] = ttldmgbnsE[2] + artDB['fourpcStt'][idx][i] * uptime
                 ttldmgbnsP[2] = ttldmgbnsP[2] + artDB['fourpcStt'][idx][i] * uptime 
             elif artDB['fourpc'][idx][i] == 'charge':
-                ttldmgbnsE[3] = ttldmgbnsE[3] + artDB['fourpcStt'][idx][i] * uptime 
-                ttldmgbnsP[3] = ttldmgbnsP[3] + artDB['fourpcStt'][idx][i] * uptime 
+                if (artName!='wt'):
+                    ttldmgbnsE[3] = ttldmgbnsE[3] + artDB['fourpcStt'][idx][i] * uptime 
+                    ttldmgbnsP[3] = ttldmgbnsP[3] + artDB['fourpcStt'][idx][i] * uptime 
+                elif (chrwpn=='bow') or (chrwpn=='catalyst'):
+                    ttldmgbnsE[3] = ttldmgbnsE[3] + artDB['fourpcStt'][idx][i] * uptime 
+                    ttldmgbnsP[3] = ttldmgbnsP[3] + artDB['fourpcStt'][idx][i] * uptime 
             elif artDB['fourpc'][idx][i] == 'plunge':
                 ttldmgbnsE[4] = ttldmgbnsE[4] + artDB['fourpcStt'][idx][i] * uptime 
                 ttldmgbnsP[4] = ttldmgbnsP[4] + artDB['fourpcStt'][idx][i] * uptime 
@@ -71,7 +82,7 @@ def artDef(artName,pcnum,stack=1,uptime=1):
             elif artDB['fourpc'][idx][i] == 'atk':
                 ttlatkp = ttlatkp + artDB['fourpcStt'][idx][i] * stacks * uptime
             elif artDB['fourpc'][idx][i] == 'crit':
-                ttlcrit = ttlcrit + .2 * stacks
+                ttlcrit = ttlcrit + artDB['fourpcStt'][idx][i] * stacks * uptime
         if artName == 'fate':
             ttldmgbnsE[2] = ttldmgbnsE[2] + min(ttler * .25,.75)             
 
