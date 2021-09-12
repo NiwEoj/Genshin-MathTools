@@ -21,7 +21,7 @@ def resCalc(enemres,resreduc):
 
 # uptime = (period of time when passive is up) / (period of time for a rotation)
 def artDef(artName,pcnum,stack=1,uptime=1):
-    global ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit,ttlhpp
+    global ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit,ttlhpp,resreducT
     idx = artDB['Name'].index(artName)
     if artDB['twopc'][idx] == 'Atk':
         ttlatkp = ttlatkp + artDB['twopcStt'][idx]
@@ -78,6 +78,8 @@ def artDef(artName,pcnum,stack=1,uptime=1):
                 ttlatkp = ttlatkp + artDB['fourpcStt'][idx][i] * stacks * uptime
             elif artDB['fourpc'][idx][i] == 'crit':
                 ttlcrit = ttlcrit + artDB['fourpcStt'][idx][i] * stacks * uptime
+            elif artDB['fourpc'][idx][i] == 'resreducT':
+                resreducT = resreducT + artDB['fourpcStt'][idx][i] * stacks
         if artName == 'fate':
             ttldmgbnsE[2] = ttldmgbnsE[2] + min(ttler * .25,.75)             
 
@@ -85,10 +87,10 @@ def artDef(artName,pcnum,stack=1,uptime=1):
 reaction = 'ec'
 lvmulti = 725                         # base transformative dmg. Base dmg at lv70, 80, 90 is 383, 540, 725
 chrlv,chratk,chrdef,chrhp,chrelem,chrwpn = (90,244,594,9189,'electro','bow')
-asccrit,asccdmg,ascatk,ascem,ascdef,aschp,ascdmgbns,ascpdmgbns = (0,0,.24,0,0,0,0,0)
-wpnatk,wpncrit,wpncdmg,wpnatkp,wpnem,wpndef,wpnhp = (510,0,0,.413,0,0,0)        # wpnatk is weapon base atk stat, wpnatkp is its secondary stat if it has atk as secondary
+asccrit,asccdmg,ascatk,ascem,ascdef,aschp,ascdmgbns,ascpdmgbns,ascer = (0,0,.24,0,0,0,0,0,0)
+wpnatk,wpncrit,wpncdmg,wpnatkp,wpnem,wpndef,wpnhp,wpner = (510,0,0,.413,0,0,0,0)        # wpnatk is weapon base atk stat, wpnatkp is its secondary stat if it has atk as secondary
 wpnpdmgbns = 0
-artcrit,artcdmg,artatk,artatkflat,artem,artdef,artdefflat,arthp,arthpflat,artdmgbns = (.55,.7,.7,0,0,0,0,0,0,.466)
+artcrit,artcdmg,artatk,artatkflat,artem,artdef,artdefflat,arthp,arthpflat,artdmgbns,arter = (.55,.7,.7,0,0,0,0,0,0,.466,0)
 artpdmgbns = 0
 artflower,artfeather = (4780,311)
 artreactbnsA,artreactbnsT = (0,0)
@@ -134,6 +136,7 @@ ttldmgbnsP = artpdmgbns + wpnpdmgbns + ascpdmgbns + 1
 ttldmgbnsP = [ttldmgbnsP]*5
 ttlreactbnsA = 0
 ttlreactbnsT = 0
+ttler = ascer + wpner + arter + 1
 A,B,C,D,E,F,G,H = (ttlatkp,tuple(ttldmgbnsE),tuple(ttldmgbnsP),ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit)
 if reaction == 'vape':
     reactmulti = 1.5 
