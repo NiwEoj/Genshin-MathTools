@@ -3,107 +3,113 @@
 {% block content %}
 
 <style>
-    .container {
-        width: 100%;
+    .character_main {
+        background-color: #343A40;
+        grid-area: main;
+        border-radius: 10px;
+    }
+
+    .equipment_main {
+        background-color: #343A40;
+        grid-area: equipment;
+        border-radius: 10px;
+        display: grid;
+        grid-template-rows: 1.3fr 1fr;
+    }
+
+    .thumbnail {
+        border:white 1px solid;
+        height: 100px;
+    }
+
+    .thumbnail_sm {
+        height: 50px;
+    }
+
+    .thumbnail_xs {
+        height: 30px;
+    }
+
+    .content_header {
+        display: grid;
+        padding: 10px;
+    }
+
+    .selection_button {
+        cursor: pointer;
+    }
+
+    .level {
+        margin-left: 10px;
+        padding: 5px;
+        width: 70px;
+        background: none;
+        outline: none;
         color: white;
     }
 
-    .configuration_container {
-        background-color: #343A40;
-        margin: 10px;
-        display: flex;
+    .level>option {
+        background: #212529;
+        padding: 10px;
     }
 
-    .configuration_container_item{
-        width: 50%;
-    }
 
-    .selection_area {
+    .list {
+        display: none;
         position: absolute;
-        height: 0px;
-        width: fit-content;
-        background-color: #212529;
-        visibility: hidden;
-        overflow: hidden;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
     }
 
-    .selection_area.active {
-        display: grid;
-        grid-template-columns: max-content max-content max-content max-content max-content max-content max-content;
-        grid-template-rows: max-content max-content max-content max-content max-content;
-        grid-gap: 5px;
-        height: 500px;
-        visibility: visible;
-        transition: height .5s;
+    .list_item {
+        background: #212529;
+        padding: 15px;
     }
 
-    .character_button {
-        margin: 5px;
-        border: 2px solid #2B3035;
-        display: flex;
-        justify-content: center;
-        cursor: pointer;
+
+    .stats_table table {
+        width: 100% !important;
+        font-size: 15px;
     }
 
-    .character_button img {
-        width: 80px;
+    .stats_table th,
+    td {
+        color: white;
+        padding: 6px 15px 6px 15px;
+
     }
 
-    .arrow {
-        border: solid white;
-        border-width: 0 3px 3px 0;
-        display: inline-block;
-        padding: 3px;
-        margin-left: 5%;
-        margin-bottom: 1%;
-        cursor: pointer;
+    .stat_header {
+        background: #212529;
+        text-align: left;
     }
 
-    .down {
-        transform: rotate(45deg);
-        -webkit-transform: rotate(45deg);
-        transition: transform .5s;
+    .stat_value {
+        text-align: right;
+        width: 25%;
+
     }
 
-    .up {
-        transform: rotate(225deg);
-        -webkit-transform: rotate(225deg);
-        transition: transform .5s;
+    .field {
+
+        -webkit-appearance: none;
+        margin: 0;
     }
 </style>
 
-<div class="container">
-    <div class="configuration_container">
-        <div class="configuration_container_item">
-            <div class=sub_container_header>
-                <form id="select_character" method="GET" action="{% url 'builder' %}">
-                    <input type="hidden" value="" id="char_id" name="character">
-                </form>
-                <h1 style="padding: 0 15px 0 15px;">{{ selected_char.name }}<i class="arrow down" id="arrow1" onclick="charSelection(this)"></i></h1>
-                <div class="selection_area" id="char_selection">
-                    {% for c in characters %}
-                    <div class="character_button">
-                        <a onclick="selectChar(this.id)" id="{{ c.id }}"><img src="{{ c.pic }}"></a>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="sub_container_body">
-                {% include 'content/builder/characterStats.html' %}
-            </div>
-        </div>
-        <div class="configuration_container_item">
-            <div class="sub_container_body">
-                <div id="weapon">
-                    {% include 'content/builder/weaponStats.html' %}
-                </div>
-                <div id="artifacts" style="padding: 0 15px 0 15px;">
-                    {% include 'content/builder/artifactsStats.html' %}
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="character_main">
+    {% include 'content/builder/characterStats.html' %}
 </div>
+
+<div class="equipment_main">
+    {% include 'content/builder/weaponStats.html' %}
+    {% include 'content/builder/artifactStats.html' %}
+</div>
+
+<!-- jQuery -->
+{% load static %}
+<script src="{% static 'js/statsManagement.js' %}"></script>
 
 <script>
     function charSelection() {

@@ -7,18 +7,56 @@
     <!-- jQuery -->
     {% load static %}
     <script src="{% static 'js/jQuery.min.js' %}"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 </head>
 
-<body style="padding: 0; margin: 0; font-family: Arial, Helvetica, sans-serif; background-color: #2B3035;">
-    <!-- page header, refer to header.html -->
-    {% include 'base/header.html' %}
+<style>
+    body {
+        padding: 0;
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #2B3035;
+        color: white;
+    }
 
-    <!-- page content, replace with appropriate content -->
-    {% block content %}
-    {% endblock %}
+    @media (min-width: 480px) {
+        .container {
+            box-sizing: border-box;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: .8fr .5fr;
+            grid-template-areas: "main equipment";
+            grid-gap: 10px;
+        }
+    }
 
-    <!-- page footer, refer to footer.html -->
+    /* @media (max-width: 480px) { */
+    .container {
+        box-sizing: border-box;
+        height: 100vh;
+        display: grid;
+        grid-template-columns: .3fr 1fr .7fr;
+        grid-template-areas: "sidebar main equipment";
+        grid-gap: 10px;
+        padding: 10px;
+    }
+
+    /* } */
+</style>
+
+<body>
+
+    {% include 'content/builder/modal.html' %}
+    
+    <div class="container">
+        <!-- sidebar, replace with appropriate content -->
+        {% include 'base/sidebar.html' %}
+
+        <!-- page content, replace with appropriate content -->
+        {% block content %}
+        {% endblock %}
+    </div>
 </body>
 
 </html>

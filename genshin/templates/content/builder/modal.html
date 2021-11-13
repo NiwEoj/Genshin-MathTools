@@ -1,0 +1,128 @@
+<style>
+    .modal {
+        position: fixed;
+        display: none;
+        background: rgba(1, 1, 1, .7);
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+
+    }
+
+    .modal_container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .modal_box {
+        background-color: #343A40;
+        display: flex;
+        flex-direction: column;
+        height: 550px;
+    }
+
+
+    .modal_header {
+        float: right;
+        display: flex;
+        flex-direction: row-reverse;
+        background: #212529;
+    }
+
+    .close {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+    }
+
+    .close::after {
+        display: inline-block;
+        content: "\00d7";
+        font-size: 35px;
+    }
+
+    .modal_body {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        overflow: auto;
+        overflow-x: hidden;
+        padding: 10px;
+    }
+
+    .selection_item {
+        background: none;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="modal" id="modal">
+    <div class="modal_container">
+        <div class="modal_box">
+            <div class="modal_header">
+                <button class="close" id="close_button"></button>
+            </div>
+            <div class="modal_body" id="modal_body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('click', ".selection_item", function (event) {
+        $id = $(this).val()
+
+        if ($(this).hasClass("select_character")) {
+            $.ajax({
+
+                type: "GET",
+                url: "/builder",
+                data: {
+                    "id": $id
+                },
+                success: function (data) {
+                    document.write(data)
+                    document.close()
+                },
+                error: function (e) {
+                    alert(e.responseText)
+                }
+
+            })
+        } else if ($(this).hasClass("select_weapon")) {
+            $.ajax({
+
+                type: "GET",
+                url: "/change_weapon",
+                data: {
+                    "id": $id
+                },
+                success: function (data) {
+                    $("#weapon_container").replaceWith(data)
+                    $("#modal").toggle()
+                    $("#modal_body").empty()
+
+                    $("#selected_weapon").remove()
+                
+                },
+                error: function (e) {
+                    alert(e.responseText)
+                }
+
+            })
+        }
+
+    })
+
+    $("#close_button").click(function () {
+        $("#modal").toggle()
+        $("#modal_body").empty()
+    })
+</script>

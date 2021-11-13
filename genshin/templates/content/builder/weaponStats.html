@@ -1,65 +1,96 @@
 <style>
+    .weapon {}
 </style>
 
-<div class=sub_container_header>
-    <form id="select_character" method="GET" action="{% url 'builder' %}">
-                <input type="hidden" value="" id="char_id" name="character">
-            </form>
-    <h1 style="padding: 0 15px 0 15px;">Mistsplitter Reforged<i class="arrow down" id="arrow1" onclick="weaponSelection()"></i></h1>
-    <div class="selection_area" id="char_selection">
-                {% for c in characters %}
-                <div class="character_button">
-                    <a onclick="selectChar(this.id)" id="{{ c.id }}"><img src="{{ c.pic }}"></a>
-                </div>
-                {% endfor %}
-            </div>
-</div>
-<div class="stats_table">
-    <table>
-        <tr>
-            <th colspan="2" class="stat_header">Main Stat</th>
-            <th colspan="2" class="stat_header">Secondary Stat</th>
-        </tr>
-        <tr>
-            <td class="stat_title">Base ATK</td>
-            <td class="stat_value">-</td>
-            <td class="stat_title">Crit Rate</td>
-            <td class="stat_value">-</td>
-        </tr>
-        <tr>
-            <th colspan="4" class="stat_header">Main Stat</th>
-        </tr>
-        <tr>
-            <td colspan="4" class="stat_title">
-                <p style="text-align: justify;">Gain a 12% Elemental DMG Bonus for every element and receive the might of Mistsplitter's Emblem. At stack levels 1/2/3, Mistsplitter's
-                    Emblem
-                    provides a 8/16/28% Elemental DMG
-                    Bonus for the character's Elemental Type. The character will obtain 1 stack of Mistsplitter's Emblem in each of the following scenarios: Normal Attack deals Elemental
-                    DMG
-                    (stack lasts 5s), casting Elemental Burst (stack lasts 10s); Energy is less than 100% (stack disappears when Energy is full). Each stack's duration is calculated
-                    independently.
-                </p>
-            </td>
-        </tr>
-    </table>
+{{ selected_weapon|json_script:"selected_weapon" }}
+
+<div class="weapon" id="weapon_container">
+    <div class="content_header" style="grid-template-columns: .4fr 1fr;">
+        <img class="thumbnail" id="weapon_img">
+        <div class="selection">
+            <h2 class="selection_button" id="weapon_name"></h2>
+            <span>
+                Level
+                <select class="level">
+                    <option>1</option>
+                    <option>20</option>
+                    <option>40</option>
+                    <option>50</option>
+                    <option>60</option>
+                    <option>70</option>
+                    <option>80</option>
+                    <option>90</option>
+                </select>
+            </span>
+        </div>
+    </div>
+
+    <div class="stats_table">
+        <table>
+            <tr>
+                <th colspan="2" class="stat_header">Main Stat</th>
+                <th colspan="2" class="stat_header">Secondary Stat</th>
+            </tr>
+            <tr>
+                <td class="stat_title">ATK</td>
+                <td class="stat_value" id="weapon_attack"></td>
+                <td class="stat_title" id="weapon_secondary"></td>
+                <td class="stat_value" id="weapon_stat"></td>
+            </tr>
+            <tr>
+                <th colspan="4" class="stat_header">Passive</th>
+            </tr>
+            <tr>
+                <td colspan="4" class="stat_value">
+                    <p style="text-align: justify; margin: 5px" id="weapon_passive">
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <script>
-    document.getElementById("defaultOpen").click();
 
-    function charSelection() {
+    $(document).ready(function(){
 
-        var selectionArea = document.getElementById("char_selection")
-        var arrow = document.getElementById("arrow1")
+        $selected_weapon =  jQuery.parseJSON(JSON.parse($("#selected_weapon").text()))
 
-        selectionArea.classList.toggle("active")
-        arrow.classList.toggle("up");
-        arrow.classList.toggle("down");
+        $("#weapon_img").attr("src", $selected_weapon[0].fields.pic)
+        $("#weapon_name").text($selected_weapon[0].fields.name)
+        $("#weapon_attack").text($selected_weapon[0].fields.attack)
+        $("#weapon_secondary").text($selected_weapon[0].fields.statTitle)
+        $("#weapon_stat").text($selected_weapon[0].fields.stat)
+        $("#weapon_passive").text($selected_weapon[0].fields.passive)
+        
+        setAttack($selected_weapon[0].fields.attack, 1)
+        
+    })
 
-    }
+    $("#weapon_name").click(e => {
+        $("#modal").toggle();
+        $.ajax({
 
-    function selectChar(id) {
-        document.getElementById("char_id").value = id
-        document.getElementById("select_character").submit()
-    }
+            method: "GET",
+            url: "/ajax/get_weapons/",
+            dataType: "json",
+            data: {
+                "type": $("#user").val()
+            },
+            success: function (data) {
+                data.weapons.forEach(item => {
+                    $("#modal_body").append(
+                        "<button class='selection_item select_weapon' id=" + item[1] + " value=" + item[0] + ">\
+                            <img class='thumbnail' src=" + item[2] + ">\
+                        </button>"
+                    )
+                });
+            },
+            error: function (e) {
+                alert(e.responseText)
+            }
+
+        })
+
+    })
 </script>

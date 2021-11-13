@@ -3,10 +3,10 @@ from django.db import models
 class Character(models.Model):
     name        = models.TextField(max_length=100)
     pic         = models.TextField(default="")
-    user        = models.IntegerField(default=1) # 1 - sword, 2 - claymore, 3 - polearm, 4 - bow, 5 - catalyst
-    hp          = models.FloatField(default=0.0)
-    attack      = models.FloatField(default=0.0)
-    defence     = models.FloatField(default=0.0)
+    user        = models.IntegerField(default=1) # 1 - sword, 2 - claymore, 3 - polearm, 4 - catalyst, 5 - bow
+    hp          = models.TextField(default="[]")
+    attack      = models.TextField(default="[]")
+    defence     = models.TextField(default="[]")
     em          = models.FloatField(default=0.0)
     stamina     = models.FloatField(default=0.0)
     critRate    = models.FloatField(default=0.05)
@@ -33,3 +33,6 @@ class Character(models.Model):
     geoRes      = models.FloatField(default=0.0)
     physDmg     = models.FloatField(default=0.0)
     physRes     = models.FloatField(default=0.0)
+
+    ascStat     = models.TextField(default="")
+    ascension   = models.TextField(default="[]")

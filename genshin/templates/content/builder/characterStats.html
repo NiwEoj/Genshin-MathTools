@@ -1,27 +1,67 @@
 <style>
-    .stats_table table {
-        width: 100% !important;
-        font-size: 15px;
+    .talents {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
-    .stats_table th,
-    td {
+    .buttons_container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .button {
+        background: none;
+        border: 1px solid white;
         color: white;
-        padding: 6px 15px 6px 15px;
-
-    }
-
-    .stat_header {
-        background: #212529;
-        text-align: left;
-    }
-
-    .stat_value {
-        text-align: right;
-        width: 25%;
-
+        cursor: pointer;
+        width: 100%;
+        margin: 5px;
+        padding: 5px;
+        font-size: 15px;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
     }
 </style>
+
+{{ selected_character|json_script:"selected_character" }}
+
+<div class="content_header" style="grid-template-columns: .3fr 1fr .3fr;">
+    <img class="thumbnail" id="character_img">
+    <input type="hidden" id="user">
+    <div class="selection">
+        <h2 class="selection_button" id="character_name"></h2>
+        <span>
+            Level
+            <select class="level" id="select_level">
+                <option value="0">1</option>
+                <option value="1">20</option>
+                <option value="2">40</option>
+                <option value="3">50</option>
+                <option value="4">60</option>
+                <option value="5">70</option>
+                <option value="6">80</option>
+                <option value="7">90</option>
+            </select>
+        </span>
+    </div>
+    <div class="buttons_container">
+        <button class="button" id="reset"><i class="material-icons">restart_alt</i> Reset</button>
+        <button class="button" id="reset"><i class="material-icons">handyman</i> Build</button>
+    </div>
+</div>
+<!-- <div class="talents">
+        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
+        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
+        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
+        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
+        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
+        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
+    </div> -->
 
 <div class="stats_table">
     <table>
@@ -31,95 +71,193 @@
         </tr>
         <tr>
             <td class="stat_title">HP</td>
-            <td class="stat_value">{{ selected_char.hp }}</td>
+            <td class="stat_value" id="character_hp"></td>
             <td class="stat_title">Pyro Damage</td>
-            <td class="stat_value">{{ selected_char.pyroDmg }}</td>
+            <td class="stat_value" id="character_pyroDmg"></td>
         </tr>
         <tr>
             <td class="stat_title">ATK</td>
-            <td class="stat_value">{{ selected_char.attack }}</td>
+            <td class="stat_value" id="character_attack"></td>
             <td class="stat_title">Pyro Resistance</td>
-            <td class="stat_value">{{ selected_char.pyroRes }}</td>
+            <td class="stat_value" id="character_pyroRes"></td>
         </tr>
         <tr>
             <td class="stat_title">DEF</td>
-            <td class="stat_value">{{ selected_char.defence }}</td>
+            <td class="stat_value" id="character_defence"></td>
             <td class="stat_title">Hydro Damage</td>
-            <td class="stat_value">{{ selected_char.hydroDmg }}</td>
+            <td class="stat_value" id="character_hydroDmg"></td>
         </tr>
         <tr>
             <td class="stat_title">Elemental Mastery</td>
-            <td class="stat_value">{{ selected_char.em }}</td>
+            <td class="stat_value" id="character_em"></td>
             <td class="stat_title">Hydro Resistance</td>
-            <td class="stat_value">{{ selected_char.hydroRes }}</td>
+            <td class="stat_value" id="character_hydroRes"></td>
         </tr>
         <tr>
             <td class="stat_title">Stamina</td>
-            <td class="stat_value">{{ selected_char.stamina }}</td>
+            <td class="stat_value" id="character_stamina"></td>
             <td class="stat_title">Dendro Damage</td>
-            <td class="stat_value">{{ selected_char.dendroDmg }}</td>
+            <td class="stat_value" id="character_dendroDmg"></td>
         </tr>
         <tr>
             <th colspan="2" class="stat_header">Advanced Stat</th>
             <td class="stat_title">Dendro Resistance</td>
-            <td class="stat_value">{{ selected_char.dendroRes }}</td>
+            <td class="stat_value" id="character_dendroRes"></td>
         </tr>
         <tr>
             <td class="stat_title">Crit Rate</td>
-            <td class="stat_value">{{ selected_char.critRate }}</td>
+            <td class="stat_value" id="character_critRate"></td>
             <td class="stat_title">Electro Damage</td>
-            <td class="stat_value">{{ selected_char.electroDmg }}</td>
+            <td class="stat_value" id="character_electroDmg"></td>
         </tr>
         <tr>
             <td class="stat_title">Crit Damage</td>
-            <td class="stat_value">{{ selected_char.critDmg }}</td>
+            <td class="stat_value" id="character_critDmg"></td>
             <td class="stat_title">Electro Resistance</td>
-            <td class="stat_value">{{ selected_char.electroRes }}</td>
+            <td class="stat_value" id="character_electroRes"></td>
         </tr>
         <tr>
             <td class="stat_title">Healing Bonus</td>
-            <td class="stat_value">{{ selected_char.selfHeal }}</td>
+            <td class="stat_value" id="character_selfHeal"></td>
             <td class="stat_title">Anemo Damage</td>
-            <td class="stat_value">{{ selected_char.anemoDmg }}</td>
+            <td class="stat_value" id="character_anemoDmg"></td>
         </tr>
         <tr>
             <td class="stat_title">Incoming Healing Bonus</td>
-            <td class="stat_value">{{ selected_char.othersHeal }}</td>
+            <td class="stat_value" id="character_othersHeal"></td>
             <td class="stat_title">Anemo Resistance</td>
-            <td class="stat_value">{{ selected_char.anemoRes }}</td>
+            <td class="stat_value" id="character_anemoRes"></td>
         </tr>
         <tr>
             <td class="stat_title">Elemental Recharge</td>
-            <td class="stat_value">{{ selected_char.recharge }}</td>
+            <td class="stat_value" id="character_recharge"></td>
             <td class="stat_title">Cryo Damage</td>
-            <td class="stat_value">{{ selected_char.cryoDmg }}</td>
+            <td class="stat_value" id="character_cryoDmg"></td>
         </tr>
         <tr>
             <td class="stat_title">Reduce CD</td>
-            <td class="stat_value">{{ selected_char.cdReduction }}</td>
+            <td class="stat_value" id="character_cdReduction"></td>
             <td class="stat_title">Cryo Resistance</td>
-            <td class="stat_value">{{ selected_char.cryoRes }}</td>
+            <td class="stat_value" id="character_cryoRes"></td>
         </tr>
         <tr>
             <td class="stat_title">Shield Strength</td>
-            <td class="stat_value">{{ selected_char.shield }}</td>
+            <td class="stat_value" id="character_shield"></td>
             <td class="stat_title">Geo Damage</td>
-            <td class="stat_value">{{ selected_char.geoDmg }}</td>
+            <td class="stat_value" id="character_geoDmg"></td>
         </tr>
         <tr>
             <td colspan="2"></td>
             <td class="stat_title">Geo Resistance</td>
-            <td class="stat_value">{{ selected_char.geoRes }}</td>
+            <td class="stat_value" id="character_geoRes"></td>
         </tr>
         <tr>
             <td colspan="2"></td>
             <td class="stat_title">Physical Damage</td>
-            <td class="stat_value">{{ selected_char.physDmg }}</td>
+            <td class="stat_value" id="character_physDmg"></td>
         </tr>
         <tr>
             <td colspan="2"></td>
             <td class="stat_title">Physical Resistance</td>
-            <td class="stat_value">{{ selected_char.physRes }}</td>
+            <td class="stat_value" id="character_physRes"></td>
         </tr>
     </table>
 </div>
+
+<script>
+    var hp, attack, defence, ascStat, ascension;
+
+    $(document).ready(function () {
+
+        $selected_character = jQuery.parseJSON(JSON.parse($("#selected_character").text()))
+
+        hp = JSON.parse($selected_character[0].fields.hp)
+        attack = JSON.parse($selected_character[0].fields.attack)
+        defence = JSON.parse($selected_character[0].fields.defence)
+        ascStat = $selected_character[0].fields.ascStat
+        ascension = JSON.parse($selected_character[0].fields.ascension)
+
+        setHp(hp[0], 0);
+        setAttack(attack[0], 0);
+        setDefence(defence[0], 0);
+
+        $("#user").val($selected_character[0].fields.user)
+
+        $("#character_img").attr("src", $selected_character[0].fields.pic)
+        $("#character_name").text($selected_character[0].fields.name)
+
+        $("#character_em").text($selected_character[0].fields.em)
+        $("#character_stamina").text($selected_character[0].fields.stamina)
+
+        $("#character_critRate").text($selected_character[0].fields.critRate)
+        $("#character_critDmg").text($selected_character[0].fields.critDmg)
+        $("#character_selfHeal").text($selected_character[0].fields.selfHeal)
+        $("#character_othersHeal").text($selected_character[0].fields.othersHeal)
+        $("#character_recharge").text($selected_character[0].fields.recharge)
+        $("#character_cdReduction").text($selected_character[0].fields.cdReduction)
+        $("#character_shield").text($selected_character[0].fields.shield)
+
+        $("#character_pyroRes").text($selected_character[0].fields.pyroRes)
+        $("#character_pyroDmg").text($selected_character[0].fields.pyroDmg)
+        $("#character_hydroRes").text($selected_character[0].fields.hydroRes)
+        $("#character_hydroDmg").text($selected_character[0].fields.hydroDmg)
+        $("#character_dendroDmg").text($selected_character[0].fields.dendroDmg)
+        $("#character_dendroRes").text($selected_character[0].fields.dendroRes)
+        $("#character_electroDmg").text($selected_character[0].fields.electroDmg)
+        $("#character_electroRes").text($selected_character[0].fields.electroRes)
+        $("#character_anemoDmg").text($selected_character[0].fields.anemoDmg)
+        $("#character_anemoRes").text($selected_character[0].fields.anemoRes)
+        $("#character_cryoDmg").text($selected_character[0].fields.cryoDmg)
+        $("#character_cryoRes").text($selected_character[0].fields.cryoRes)
+        $("#character_geoDmg").text($selected_character[0].fields.geoDmg)
+        $("#character_geoRes").text($selected_character[0].fields.geoRes)
+        $("#character_physDmg").text($selected_character[0].fields.physDmg)
+        $("#character_physRes").text($selected_character[0].fields.physRes)
+
+    })
+
+    $("#character_name").click(e => {
+        $("#modal").toggle();
+
+        $.ajax({
+
+            method: "GET",
+            url: "/ajax/get_characters/",
+            dataType: "json",
+            success: function (data) {
+                data.characters.forEach(item => {
+                    $("#modal_body").append(
+                        "<button class='selection_item select_character' id=" + item[1] + " value=" + item[0] + ">\
+                            <img class='thumbnail' src=" + item[2] + ">\
+                        </button>"
+                    )
+                });
+            },
+            error: function (e) {
+                alert(e.responseText)
+            }
+
+        })
+
+    })
+
+    $("#select_level").on("change", function () {
+
+        $index = $(this).val()
+
+        setHp(hp[$index], 0)
+        setAttack(attack[$index], 0)
+        setDefence(defence[$index], 0)
+
+        if ($index > 1) {
+
+            if (ascStat != "hp" || ascStat != "attack" || ascStat != "defence") {
+                $("#character_" + ascStat).text(ascension[$index - 3])
+            }
+
+
+
+        }
+
+    })
+</script>

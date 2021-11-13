@@ -1,0 +1,262 @@
+<style>
+    .tab {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+
+
+    .tab_content {
+        display: none;
+    }
+
+    .tab_container {
+        display: grid;
+        grid-template-columns: .5fr .5fr;
+    }
+
+    .tab_link {
+        border: none;
+        background: #212529;
+        padding: 5px;
+    }
+
+    .active {
+        background: #343A40 !important;
+        border-top: 2px solid #212529;
+    }
+
+    /* .artifact_selector {
+        padding: 0 15px;
+    } */
+</style>
+
+<div class="artifact">
+    <div class="tab">
+        <button class="tab_link active" value="1"><img class="thumbnail_xs"
+                src="https://static.wikia.nocookie.net/gensin-impact/images/2/2d/Icon_Flower_of_Life.png/revision/latest/scale-to-width-down/64?cb=20210712005358"></button>
+        <button class="tab_link" value="2"><img class="thumbnail_xs"
+                src="https://static.wikia.nocookie.net/gensin-impact/images/8/8b/Icon_Plume_of_Death.png/revision/latest/scale-to-width-down/64?cb=20210712005411"></button>
+        <button class="tab_link" value="3"><img class="thumbnail_xs"
+                src="https://static.wikia.nocookie.net/gensin-impact/images/9/9f/Icon_Sands_of_Eon.png/revision/latest/scale-to-width-down/64?cb=20210713185616"></button>
+        <button class="tab_link" value="4"><img class="thumbnail_xs"
+                src="https://static.wikia.nocookie.net/gensin-impact/images/3/37/Icon_Goblet_of_Eonothem.png/revision/latest/scale-to-width-down/64?cb=20210713185527"></button>
+        <button class="tab_link" value="5"><img class="thumbnail_xs"
+                src="https://static.wikia.nocookie.net/gensin-impact/images/6/64/Icon_Circlet_of_Logos.png/revision/latest?cb=20210712005353"></button>
+    </div>
+
+    <div id="tab_1" class="tab_content" style="display: block;">
+        <div class="tab_container">
+            <div class="artifact_selector">
+                <!-- <img class="thumbnail" src="https://static.wikia.nocookie.net/gensin-impact/images/c/c2/Item_Entangling_Bloom.png/revision/latest/scale-to-width-down/74?cb=20210721030058"> -->
+            </div>
+            <div class="stats_table">
+                <table>
+                    <tr>
+                        <th colspan="2" class="stat_header">Main Stat</th>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <th colspan="4" class="stat_header">Sub Stats</th>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="tab_2" class="tab_content">
+        <div class="tab_container">
+            <div class="artifact_selector">
+            </div>
+            <div class="stats_table">
+                <table>
+                    <tr>
+                        <th colspan="2" class="stat_header">Main Stat</th>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <th colspan="4" class="stat_header">Sub Stats</th>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab_3" class="tab_content">
+        <div class="tab_container">
+            <div class="artifact_selector">
+            </div>
+            <div class="stats_table">
+                <table>
+                    <tr>
+                        <th colspan="2" class="stat_header">Main Stat</th>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <th colspan="4" class="stat_header">Sub Stats</th>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab_4" class="tab_content">
+        <div class="tab_container">
+            <div class="artifact_selector">
+            </div>
+            <div class="stats_table">
+                <table>
+                    <tr>
+                        <th colspan="2" class="stat_header">Main Stat</th>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <th colspan="4" class="stat_header">Sub Stats</th>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab_5" class="tab_content">
+        <div class="tab_container">
+            <div class="artifact_selector">
+            </div>
+            <div class="stats_table">
+                <table>
+                    <tr>
+                        <th colspan="2" class="stat_header">Main Stat</th>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <th colspan="4" class="stat_header">Sub Stats</th>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                    <tr>
+                        <td class="stat_title">Base ATK</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // $("#weapon_name").click(e => {
+    //     $("#modal").toggle();
+    //     $.ajax({
+
+    //         method: "GET",
+    //         url: "/ajax/get_weapons/",
+    //         dataType: "json",
+    //         data: {
+    //             "type": $("#user").val()
+    //         },
+    //         success: function (data) {
+    //             data.weapons.forEach(item => {
+    //                 $("#modal_body").append(
+    //                     "<button class='selection_item select_weapon' id=" + item[1] + " value=" + item[0] + ">\
+    //                         <img class='thumbnail' src=" + item[2] + ">\
+    //                     </button>"
+    //                 )
+    //             });
+    //         },
+    //         error: function (e) {
+    //             alert(e.responseText)
+    //         }
+
+    //     })
+
+    // })
+
+    $(".tab_link").on("click", function () {
+        var index = $(this).val()
+
+        $(".tab_link").each(function (i, item) {
+
+            if ($(this).val() == index) {
+                $(this).addClass("active")
+            } else {
+                $(this).removeClass("active")
+            }
+
+        });
+
+        $(".tab_content").each(function (i, item) {
+
+            if ($(this).attr('id') == "tab_" + index) {
+                $(this).show()
+            } else {
+                $(this).hide()
+            }
+
+        });
+
+    })
+</script>
