@@ -67,7 +67,7 @@ def resCalc(enemres,resreduc):
 
 # adding in passives from artifacts
 def artDef(idx,pcnum,stack=1,uptime=1):
-    global ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit
+    global ttlatkp,ttldmgbnsE,ttldmgbnsP,ttlreactbnsT,ttlreactbnsA,ttlem,ttler,ttlcrit,ttlhpp,resreducT
     artName = artDB['Name'][idx]
     if artDB['twopc'][idx] == 'Atk':
         ttlatkp = ttlatkp + artDB['twopcStt'][idx]
@@ -123,7 +123,9 @@ def artDef(idx,pcnum,stack=1,uptime=1):
             elif artDB['fourpc'][idx][i] == 'atk':
                 ttlatkp = ttlatkp + artDB['fourpcStt'][idx][i] * stacks * uptime
             elif artDB['fourpc'][idx][i] == 'crit':
-                ttlcrit = ttlcrit + artDB['fourpcStt'][idx][i] * stacks * uptime           
+                ttlcrit = ttlcrit + artDB['fourpcStt'][idx][i] * stacks * uptime        
+            elif artDB['fourpc'][idx][i] == 'resreducT':
+                resreducT = resreducT + artDB['fourpcStt'][idx][i] * stacks   
 
 # calculating damage
 def Damage():
