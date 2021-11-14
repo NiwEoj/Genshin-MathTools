@@ -54,14 +54,6 @@
         <button class="button" id="reset"><i class="material-icons">handyman</i> Build</button>
     </div>
 </div>
-<!-- <div class="talents">
-        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
-        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
-        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
-        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
-        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
-        <img class="thumbnail_sm" src="https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Talent_Favonius_Bladework.png/revision/latest/scale-to-width-down/128?cb=20210607085850">
-    </div> -->
 
 <div class="stats_table">
     <table>
@@ -245,19 +237,16 @@
 
         $index = $(this).val()
 
+
+        if (ascStat != "hp" && ascStat != "attack" && ascStat != "defence") {
+            setStats(ascension[$index], ascStat, 0)
+        } else {
+            setPercent(ascension[$index], ascStat, 0)
+        }
+
         setHp(hp[$index], 0)
         setAttack(attack[$index], 0)
         setDefence(defence[$index], 0)
-
-        if ($index > 1) {
-
-            if (ascStat != "hp" || ascStat != "attack" || ascStat != "defence") {
-                $("#character_" + ascStat).text(ascension[$index - 3])
-            }
-
-
-
-        }
 
     })
 </script>
