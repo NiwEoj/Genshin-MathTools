@@ -8,7 +8,6 @@
         top: 0;
         width: 100%;
         height: 100%;
-
     }
 
     .modal_container {
@@ -23,7 +22,7 @@
         background-color: #343A40;
         display: flex;
         flex-direction: column;
-        height: 550px;
+        height: 570px;
     }
 
 
@@ -31,7 +30,19 @@
         float: right;
         display: flex;
         flex-direction: row-reverse;
+        justify-content: space-between;
         background: #212529;
+    }
+
+    .search {
+        background: none;
+        color: white;
+        font-size: 15px;
+        border: none;
+        border-bottom: 2px solid white;
+        outline: none;
+        padding: 10px;
+        margin: 10px;
     }
 
     .close {
@@ -39,6 +50,7 @@
         border: none;
         color: white;
         cursor: pointer;
+        margin: 10px;
     }
 
     .close::after {
@@ -52,7 +64,7 @@
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
         overflow: auto;
         overflow-x: hidden;
-        padding: 10px;
+        width: 752px;
     }
 
     .selection_item {
@@ -68,6 +80,7 @@
         <div class="modal_box">
             <div class="modal_header">
                 <button class="close" id="close_button"></button>
+                <input type="text" class="search" id="search_bar" autocomplete="off" placeholder="Search...">
             </div>
             <div class="modal_body" id="modal_body">
             </div>
@@ -110,7 +123,7 @@
                     $("#modal_body").empty()
 
                     $("#selected_weapon").remove()
-                
+
                 },
                 error: function (e) {
                     alert(e.responseText)
@@ -121,8 +134,23 @@
 
     })
 
+    $("#search_bar").keyup(function () {
+        var find = $(this).val();
+        find = find.substr(0, 1).toUpperCase() + find.substr(1);
+
+        $("#modal_body").children("button").each(function () {
+            if ($(this).attr("id").startsWith(find)) {
+                $(this).show()
+            } else {
+                $(this).hide()
+            }
+        })
+
+    })
+
     $("#close_button").click(function () {
         $("#modal").toggle()
         $("#modal_body").empty()
+        $("#search_bar").val("")
     })
 </script>

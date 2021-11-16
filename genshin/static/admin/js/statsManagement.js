@@ -3,8 +3,12 @@ var total_hp = [],
     total_defence = [],
     total_em = [],
     total_critRate = [],
+    total_critDmg = [],
     total_selfHeal = [],
     total_recharge = [],
+    total_cryoDmg = [],
+    total_anemoDmg = [],
+    total_geoDmg = [],
     total_physDmg = [];
 
 var hpPercent = [],
@@ -30,6 +34,16 @@ function setPercent(value, stat, index) {
 
 function setStats(value, stat, index) {
 
+    if (index == 1) {
+        if (stat == "-") {
+            $("#weapon_stat").text("-")
+            return;
+        } else {
+            $("#weapon_stat").text((value * 100).toFixed(2))
+        }
+
+    }
+
     var temp;
     eval("temp = total_" + stat)
 
@@ -41,7 +55,20 @@ function setStats(value, stat, index) {
         total += temp[i];
     }
 
-    $("#character_" + stat).text(total);
+    switch (stat) {
+        case "em":
+            $("#character_" + stat).text(total);
+            break;
+        case "critRate":
+            $("#character_" + stat).text(((total + 0.05) * 100).toFixed(2));
+            break;
+        case "critDmg":
+            $("#character_" + stat).text(((total + 0.5) * 100).toFixed(2));
+            break;
+        default:
+            $("#character_" + stat).text(total.toFixed(2));
+    }
+
 }
 
 function setHp(hp, index) {
@@ -59,7 +86,7 @@ function setHp(hp, index) {
         totalPercent += hpPercent[i];
     }
 
-    let result = Math.floor(base * (1+ totalPercent));
+    let result = Math.floor(base * (1 + totalPercent));
 
     $("#character_hp").text(result);
 
@@ -80,13 +107,17 @@ function setAttack(attack, index) {
         totalPercent += attackPercent[i];
     }
 
+    if (index == 1) {
+        $("#weapon_attack").text(total_attack[1]);
+    }
+
     /** 
      * base - Base Attack
      * totalPercent - ascension + weapon bonus + artifacts(%)
      * flat - feather + artifacts
      * */
 
-    let result = Math.floor(base * (1+ totalPercent));
+    let result = Math.floor(base * (1 + totalPercent));
     // return total * (1 + totalPercent) + flat;
 
     $("#character_attack").text(result);

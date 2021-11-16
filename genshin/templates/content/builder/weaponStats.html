@@ -8,18 +8,20 @@
     <div class="content_header" style="grid-template-columns: .4fr 1fr;">
         <img class="thumbnail" id="weapon_img">
         <div class="selection">
-            <h2 class="selection_button" id="weapon_name"></h2>
+            <span style="display: flex;">
+                <i class="fa fa-bars selection_button" id="weapon_menu" aria-hidden="true"></i>
+                <h2 id="weapon_name"></h2>
+            </span>
+
             <span>
                 Level
-                <select class="level">
-                    <option>1</option>
-                    <option>20</option>
-                    <option>40</option>
-                    <option>50</option>
-                    <option>60</option>
-                    <option>70</option>
-                    <option>80</option>
-                    <option>90</option>
+                <select class="level" id="weapon_level">
+                    <option value="0">1</option>
+                    <option value="1">20</option>
+                    <option value="2">40</option>
+                    <option value="3">50</option>
+                    <option value="4">60</option>
+                    <option value="5">70</option>
                 </select>
             </span>
         </div>
@@ -51,23 +53,37 @@
 </div>
 
 <script>
+    var weaponAttack, statTitle, weaponStat;
 
-    $(document).ready(function(){
+    $(document).ready(function () {
 
-        $selected_weapon =  jQuery.parseJSON(JSON.parse($("#selected_weapon").text()))
+        $selected_weapon = jQuery.parseJSON(JSON.parse($("#selected_weapon").text()))
+        weaponAttack = JSON.parse($selected_weapon[0].fields.attack)
+        statTitle = $selected_weapon[0].fields.statTitle
+        weaponStat = JSON.parse($selected_weapon[0].fields.stat)
+
+        if ($selected_weapon[0].fields.rarity > 2) {
+            $("#weapon_level").append("\
+                        <option value = '6'>80</option>\
+                        <option value = '7'>90</option>")
+        }
 
         $("#weapon_img").attr("src", $selected_weapon[0].fields.pic)
         $("#weapon_name").text($selected_weapon[0].fields.name)
-        $("#weapon_attack").text($selected_weapon[0].fields.attack)
-        $("#weapon_secondary").text($selected_weapon[0].fields.statTitle)
-        $("#weapon_stat").text($selected_weapon[0].fields.stat)
+
+        $("#weapon_secondary").text(statTitle)
         $("#weapon_passive").text($selected_weapon[0].fields.passive)
-        
-        setAttack($selected_weapon[0].fields.attack, 1)
-        
+
+        if (statTitle != "hp" && statTitle != "attack" && statTitle != "defence") {
+            setStats(weaponStat[0], statTitle, 1)
+        } else {
+            setPercent(weaponStat[0], statTitle, 1)
+        }
+
+        setAttack(weaponAttack[0], 1)
     })
 
-    $("#weapon_name").click(e => {
+    $("#weapon_menu").click(e => {
         $("#modal").toggle();
         $.ajax({
 
@@ -91,6 +107,26 @@
             }
 
         })
+
+    })
+
+    $("#weapon_level").on("change", function () {
+
+        $index = $(this).val()
+
+        // if (ascStat != "hp" && ascStat != "attack" && ascStat != "defence") {
+        //     setStats(ascension[$index], ascStat, 1)
+        // } else {
+        //     setPercent(ascension[$index], ascStat, 1)
+        // }
+
+        setAttack(weaponAttack[$index], 1)
+
+        if (statTitle != "hp" && statTitle != "attack" && statTitle != "defence") {
+            setStats(weaponStat[$index], statTitle, 1)
+        } else {
+            setPercent(weaponStat[$index], statTitle, 1)
+        }
 
     })
 </script>

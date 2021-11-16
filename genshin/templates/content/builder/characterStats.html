@@ -34,10 +34,13 @@
     <img class="thumbnail" id="character_img">
     <input type="hidden" id="user">
     <div class="selection">
-        <h2 class="selection_button" id="character_name"></h2>
+        <span style="display: flex;">
+            <i class="fa fa-bars selection_button" id="char_menu" aria-hidden="true"></i>
+            <h2 id="character_name"></h2>
+        </span>
         <span>
             Level
-            <select class="level" id="select_level">
+            <select class="level" id="char_level">
                 <option value="0">1</option>
                 <option value="1">20</option>
                 <option value="2">40</option>
@@ -49,17 +52,17 @@
             </select>
         </span>
     </div>
-    <div class="buttons_container">
+    <!-- <div class="buttons_container">
         <button class="button" id="reset"><i class="material-icons">restart_alt</i> Reset</button>
         <button class="button" id="reset"><i class="material-icons">handyman</i> Build</button>
-    </div>
+    </div> -->
 </div>
 
 <div class="stats_table">
     <table>
         <tr>
             <th colspan="2" class="stat_header">Base Stat</th>
-            <th colspan="2" class="stat_header">Elemental Type</th>
+            <th colspan="2" class="stat_header">Elemental Bonus (%)</th>
         </tr>
         <tr>
             <td class="stat_title">HP</td>
@@ -97,13 +100,13 @@
             <td class="stat_value" id="character_dendroRes"></td>
         </tr>
         <tr>
-            <td class="stat_title">Crit Rate</td>
+            <td class="stat_title">Crit Rate (%)</td>
             <td class="stat_value" id="character_critRate"></td>
             <td class="stat_title">Electro Damage</td>
             <td class="stat_value" id="character_electroDmg"></td>
         </tr>
         <tr>
-            <td class="stat_title">Crit Damage</td>
+            <td class="stat_title">Crit Damage (%)</td>
             <td class="stat_value" id="character_critDmg"></td>
             <td class="stat_title">Electro Resistance</td>
             <td class="stat_value" id="character_electroRes"></td>
@@ -178,14 +181,15 @@
         $("#character_img").attr("src", $selected_character[0].fields.pic)
         $("#character_name").text($selected_character[0].fields.name)
 
-        $("#character_em").text($selected_character[0].fields.em)
+        setStats($selected_character[0].fields.em, "em", 0)
+
         $("#character_stamina").text($selected_character[0].fields.stamina)
 
-        $("#character_critRate").text($selected_character[0].fields.critRate)
-        $("#character_critDmg").text($selected_character[0].fields.critDmg)
-        $("#character_selfHeal").text($selected_character[0].fields.selfHeal)
+        setStats($selected_character[0].fields.critRate, "critRate", 0)
+        setStats($selected_character[0].fields.critDmg, "critDmg", 0)
+        setStats($selected_character[0].fields.selfHeal, "selfHeal", 0)
         $("#character_othersHeal").text($selected_character[0].fields.othersHeal)
-        $("#character_recharge").text($selected_character[0].fields.recharge)
+        setStats($selected_character[0].fields.recharge, "recharge", 0)
         $("#character_cdReduction").text($selected_character[0].fields.cdReduction)
         $("#character_shield").text($selected_character[0].fields.shield)
 
@@ -197,18 +201,18 @@
         $("#character_dendroRes").text($selected_character[0].fields.dendroRes)
         $("#character_electroDmg").text($selected_character[0].fields.electroDmg)
         $("#character_electroRes").text($selected_character[0].fields.electroRes)
-        $("#character_anemoDmg").text($selected_character[0].fields.anemoDmg)
+        setStats($selected_character[0].fields.anemoDmg, "anemoDmg", 0)
         $("#character_anemoRes").text($selected_character[0].fields.anemoRes)
-        $("#character_cryoDmg").text($selected_character[0].fields.cryoDmg)
+        setStats($selected_character[0].fields.cryoDmg, "cryoDmg", 0)
         $("#character_cryoRes").text($selected_character[0].fields.cryoRes)
-        $("#character_geoDmg").text($selected_character[0].fields.geoDmg)
+        setStats($selected_character[0].fields.geoDmg, "geoDmg", 0)
         $("#character_geoRes").text($selected_character[0].fields.geoRes)
-        $("#character_physDmg").text($selected_character[0].fields.physDmg)
+        setStats($selected_character[0].fields.physDmg, "physDmg", 0)
         $("#character_physRes").text($selected_character[0].fields.physRes)
 
     })
 
-    $("#character_name").click(e => {
+    $("#char_menu").click(e => {
         $("#modal").toggle();
 
         $.ajax({
@@ -233,7 +237,7 @@
 
     })
 
-    $("#select_level").on("change", function () {
+    $("#char_level").on("change", function () {
 
         $index = $(this).val()
 

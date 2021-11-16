@@ -4,13 +4,14 @@ class Character(models.Model):
     name        = models.TextField(max_length=100)
     pic         = models.TextField(default="")
     user        = models.IntegerField(default=1) # 1 - sword, 2 - claymore, 3 - polearm, 4 - catalyst, 5 - bow
+    element     = models.IntegerField(default=1) # 1 - pyro, 2 - hydro, 3 - dendro, 4 - electro, 5 - anemo, 6 - cryo, 7 - geo
     hp          = models.TextField(default="[]")
     attack      = models.TextField(default="[]")
     defence     = models.TextField(default="[]")
     em          = models.FloatField(default=0.0)
     stamina     = models.FloatField(default=0.0)
-    critRate    = models.FloatField(default=0.05)
-    critDmg     = models.FloatField(default=0.5)
+    critRate    = models.FloatField(default=0.0)
+    critDmg     = models.FloatField(default=0.0)
     selfHeal    = models.FloatField(default=0.0)
     othersHeal  = models.FloatField(default=0.0)
     recharge    = models.FloatField(default=1.0)
